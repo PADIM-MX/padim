@@ -1,0 +1,25 @@
+# Fragmento para agregar al final de /etc/caddy/Caddyfile
+# Ya existe el A record: padim.enmexico.casa → 74.208.40.123
+
+padim.enmexico.casa {
+    root * /home/polaris/workspace/projects/BACKBONE/padim/site
+    file_server
+    encode gzip zstd
+
+    # Docs de la especificación
+    handle /docs/* {
+        root * /home/polaris/workspace/projects/BACKBONE/padim/docs
+        file_server
+    }
+
+    # Redirect a GitHub
+    handle /repo {
+        redir https://github.com/PADIM-MX/padim permanent
+    }
+
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        -Server
+    }
+}

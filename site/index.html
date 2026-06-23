@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PADIM — Protocolo Abierto de Datos Inmobiliarios de México</title>
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-text: #e0e0e0;
+            --color-accent: #f0c040;
+            --color-link: #80bfff;
+            --color-border: #2a2a2a;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 6rem 0 4rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        h1 span { color: var(--color-accent); }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #888;
+            max-width: 600px;
+            margin: 1rem auto 2rem;
+        }
+        .acronym {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #666;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Niveles */
+        .levels { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 3rem 0; }
+        @media (min-width: 640px) { .levels { grid-template-columns: 1fr 1fr 1fr; } }
+        .level {
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: border-color 0.2s;
+        }
+        .level:hover { border-color: var(--color-accent); }
+        .level-num {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+        .level h3 { color: #fff; margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .level p { font-size: 0.9rem; color: #999; }
+
+        /* Secciones */
+        section { padding: 3rem 0; border-bottom: 1px solid var(--color-border); }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1.5rem;
+        }
+        p { margin-bottom: 1rem; color: #bbb; }
+
+        /* Código */
+        code, pre {
+            font-family: var(--font-mono);
+            background: #141414;
+            border-radius: 6px;
+        }
+        pre {
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--color-border);
+            font-size: 0.85rem;
+        }
+        code { padding: 0.2em 0.4em; font-size: 0.9em; }
+
+        /* Comandos */
+        .cmd { background: #111; border-left: 3px solid var(--color-accent); }
+
+        /* Botón */
+        .btn {
+            display: inline-block;
+            background: var(--color-accent);
+            color: #0a0a0a;
+            font-weight: 700;
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            margin-top: 1rem;
+        }
+        .btn:hover { opacity: 0.85; }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            margin-left: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #555;
+            font-size: 0.85rem;
+        }
+        footer a { color: #777; }
+
+        a { color: var(--color-link); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .quick-start { background: #111; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+        .badge-green { background: #1a3a1a; color: #4caf50; }
+        .badge-yellow { background: #3a3a1a; color: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header>
+            <div class="acronym">P·A·D·I·M</div>
+            <h1>Protocolo <span>Abierto</span> de Datos<br>Inmobiliarios de <span>México</span></h1>
+            <p class="subtitle">Un estándar público, gratuito y descentralizado para los datos de propiedades en México. Código abierto. Datos de todos. Propiedad de nadie.</p>
+            <a href="#empezar" class="btn">Comenzar →</a>
+            <a href="https://github.com/PADIM-MX/padim" class="btn btn-ghost">GitHub</a>
+        </header>
+
+        <section id="niveles">
+            <h2>Tres niveles, un protocolo</h2>
+            <div class="levels">
+                <div class="level">
+                    <div class="level-num">01 — LO QUE ES</div>
+                    <h3>El Estándar</h3>
+                    <p>El schema de datos. La especificación REST. El formato de intercambio. Inmutable. Público. Gratis. No requiere mantenimiento. Existe y existirá.</p>
+                </div>
+                <div class="level">
+                    <div class="level-num">02 — LO QUE HACE</div>
+                    <h3>Las Herramientas</h3>
+                    <p>Un CLI que se instala con <code>pip install padim</code>. Scrapea tu colonia. Valida la calidad. Contribuye al repositorio público. Evoluciona con la comunidad.</p>
+                </div>
+                <div class="level">
+                    <div class="level-num">03 — LO QUE CONSTRUYE</div>
+                    <h3>Los Datos</h3>
+                    <p>El repositorio público de propiedades de México. Cada propiedad pasa por verificación de calidad. Los datos que no cumplen no aparecen. Los que cumplen son de todos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="empezar">
+            <h2>⚡ Quick Start</h2>
+            <div class="quick-start">
+                <pre class="cmd">pip install padim
+
+# Scrapea propiedades de una colonia
+padim scrape vivanuncios --colonia "Del Valle" --output delvalle.json
+
+# Valida la calidad de los datos
+padim validate delvalle.json
+
+# Calcula trust score (0.0 - 1.0)
+padim quality delvalle.json
+
+# Sirve una API local con los datos
+padim serve --port 8080</pre>
+            </div>
+            <p>El CLI corre todo localmente en tu máquina. No enviamos datos a ningún servidor central sin tu permiso explícito.</p>
+        </section>
+
+        <section id="trust">
+            <h2>🧠 Trust Engine</h2>
+            <p>Cada propiedad contribuida pasa por un sistema de verificación de calidad antes de ser aceptada en el repositorio público.</p>
+            <div class="levels" style="grid-template-columns: 1fr 1fr;">
+                <div class="level">
+                    <span class="badge badge-yellow">Ghost</span>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">Propiedades que ya no existen (>90 días sin cambios). Impacto: <strong>-1.0</strong></p>
+                </div>
+                <div class="level">
+                    <span class="badge badge-yellow">Fraude</span>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">Keywords sospechosas + precio anómalo. Impacto: <strong>-0.9</strong></p>
+                </div>
+                <div class="level">
+                    <span class="badge badge-yellow">Precio</span>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">Precios irrealmente bajos o altos vs mercado. Impacto: <strong>-1.0</strong></p>
+                </div>
+                <div class="level">
+                    <span class="badge badge-yellow">Agente</span>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">Agentes que dejan anuncios viejos para generar llamadas. Impacto: <strong>-0.6</strong></p>
+                </div>
+            </div>
+            <p>Sin base de datos. Sin servidor central. Lógica pura que corre en tu máquina.</p>
+        </section>
+
+        <section id="como">
+            <h2>🤝 ¿Cómo participas?</h2>
+            <div class="levels">
+                <div class="level">
+                    <span class="badge badge-green">1</span>
+                    <h3 style="margin-top:0.5rem;">Usa el estándar</h3>
+                    <p>Adopta el schema PADIM en tu proyecto, startup o universidad. No necesitas contribuir datos. Solo usar el estándar.</p>
+                </div>
+                <div class="level">
+                    <span class="badge badge-green">2</span>
+                    <h3 style="margin-top:0.5rem;">Contribuye datos</h3>
+                    <p><code>padim scrape</code> desde tu computadora. Los datos se validan automáticamente. Si pasan calidad, se integran al dataset público.</p>
+                </div>
+                <div class="level">
+                    <span class="badge badge-green">3</span>
+                    <h3 style="margin-top:0.5rem;">Mantén un conector</h3>
+                    <p>Adopta un conector de scraping. Si se rompe, lo arreglas. Si nadie lo mantiene por 30 días, se marca como obsoleto.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="backbone">
+            <h2>🏢 BACKBONE — La implementación enterprise</h2>
+            <p>PADIM es el protocolo abierto. <strong>BACKBONE</strong> es la versión enterprise: datos curados con Trust Scoring completo, SLA 99.9%, AVM con precisión documentada, webhooks en tiempo real, e integración con CRMs.</p>
+            <p>Como Red Hat con Linux: el protocolo es gratis. La confianza certificada se paga.</p>
+            <a href="https://back-bone.dev" class="btn btn-ghost">Conoce BACKBONE →</a>
+        </section>
+
+        <section id="manifiesto">
+            <h2>📜 El Manifiesto</h2>
+            <p>El mercado inmobiliario mexicano padece una fragmentación que no es accidental. Treinta plataformas compiten por el mismo tráfico. Ninguna comparte datos. Los portales mueren con propiedades que ya no existen.</p>
+            <p>Este desorden no es un fallo del sistema. Es el síntoma de un sistema diseñado para la escasez artificial de información.</p>
+            <p>PADIM no pide permiso. Publica el estándar. Construye las herramientas. Y deja que la comunidad haga el resto.</p>
+            <p style="margin-top:1.5rem;"><a href="https://github.com/PADIM-MX/padim/blob/main/MANIFIESTO.md">Leer el manifiesto completo →</a></p>
+        </section>
+
+        <footer>
+            <p>PADIM — Protocolo Abierto de Datos Inmobiliarios de México</p>
+            <p>Estándar: <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a> · Herramientas: <a href="https://opensource.org/licenses/MIT">MIT</a> · Datos: <a href="https://opendatacommons.org/licenses/odbl/">ODbL</a></p>
+            <p style="margin-top:1rem;">Hecho en México 🇲🇽</p>
+        </footer>
+
+    </div>
+</body>
+</html>

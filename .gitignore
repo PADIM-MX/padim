@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Venv
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data
+# NOTA: No ignoramos .json de datos porque PADIM 
+# necesita incluir datasets de ejemplo. 
+# Los datos grandes van en releases, no en el repo.
+
+# Environment
+.env
+.env.*
+*.log
