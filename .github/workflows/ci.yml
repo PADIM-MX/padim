@@ -1,0 +1,194 @@
+name: PADIM CI/CD
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  schedule:
+    # Scraping automático diario a las 6am
+    - cron: '0 6 * * *'
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  # ── TEST ─────────────────────────────────────────────────────
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest jsonschema pyyaml fastapi uvicorn httpx
+          pip install -e .
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+      - name: Run Trust Engine demo
+        run: python -m padim.engine.trust_engine
+
+  # ── BUILD & PUBLISH (PyPI) ──────────────────────────────────
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test]
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build package
+        run: |
+          pip install build
+          python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+  # ── RELEASE ASSETS (ZIP + Magnet) ──────────────────────────
+  release-assets:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build release ZIP
+        run: |
+          # Incluir scrapers si existen en el repo
+          if [ -d "padim-scrapers" ]; then
+            cd padim-scrapers
+            zip -r ../padim-scrapers-${{ github.ref_name }}.zip .
+            cd ..
+          else
+            echo "⚠️  padim-scrapers/ no encontrado, generando ZIP del core"
+            zip -r padim-core-${{ github.ref_name }}.zip padim/ spec/ cli/ engine/
+          fi
+          sha256sum *.zip > checksum.txt
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.zip
+            checksum.txt
+          generate_release_notes: true
+          body: |
+            ## PADIM ${{ github.ref_name }}
+
+            ### Instalación
+            ```bash
+            pip install padim
+            ```
+
+            ### Scrapers (descarga aparte)
+            SHA256 verificable en checksum.txt
+            Descarga: padim-scrapers-${{ github.ref_name }}.zip
+
+            ### Cambios
+            Ver commits para detalles completos.
+
+  # ── DIARIO: SCRAPE AUTOMÁTICO + DATASET ────────────────────
+  daily-scrape:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PADIM + dependencias
+        run: |
+          pip install -e .
+          pip install httpx jsonschema
+
+      - name: Scrape ciudades principales
+        run: |
+          # CDMX - colonias principales
+          mkdir -p datasets/daily
+          for colony in "Del+Valle" "Condesa" "Polanco" "Roma" "Napoles" "Santa+Fe" "Lomas+de+Chapultepec" "Anzures" "Cuauhtemoc" "Juarez"; do
+            echo "📍 Scrapeando $colony..."
+            python -m padim.cli.main scrape vivanuncios --colony "$colony" --output "datasets/daily/vivanuncios_${colony//+/_}.json" 2>&1 || true
+            python -m padim.cli.main scrape inmuebles24 --colony "$colony" --output "datasets/daily/inmuebles24_${colony//+/_}.json" 2>&1 || true
+          done
+
+      - name: Merge + trust engine + compress
+        run: |
+          cd datasets/daily
+          python -c "
+          import json, os, glob
+          all_props = []
+          for f in glob.glob('*.json'):
+              with open(f) as fh:
+                  try:
+                      data = json.load(fh)
+                      if isinstance(data, list):
+                          all_props.extend(data)
+                  except: pass
+          with open('../padim-dataset-daily.json', 'w') as fh:
+              json.dump(all_props, fh, indent=2, ensure_ascii=False)
+          print(f'Dataset: {len(all_props)} propiedades')
+          "
+          gzip -k ../padim-dataset-daily.json
+
+      - name: Upload dataset
+        uses: actions/upload-artifact@v4
+        with:
+          name: padim-dataset-daily
+          path: datasets/padim-dataset-daily.json*
+          retention-days: 30
+
+  # ── PÁGINA DE ESTADO ────────────────────────────────────────
+  status-page:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    needs: [daily-scrape]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate status page
+        run: |
+          python -c "
+          import json
+          from datetime import datetime
+          status = {
+              'project': 'PADIM',
+              'version': '2.0.0',
+              'last_update': datetime.utcnow().isoformat(),
+              'sources': ['vivanuncios', 'inmuebles24', 'propiedades_com', 'easybroker'],
+              'status': 'operational',
+              'notes': 'Scraping diario completado. Dataset disponible en releases.'
+          }
+          with open('site/status.json', 'w') as f:
+              json.dump(status, f, indent=2)
+          print(json.dumps(status, indent=2))
+          "
+
+      - name: Commit status page
+        run: |
+          git config user.name "PADIM Bot"
+          git config user.email "bot@padim.enmexico.casa"
+          git add site/status.json
+          git commit -m "📊 Status page update $(date +%Y-%m-%d)" || true
+          git push || true

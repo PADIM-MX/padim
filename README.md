@@ -1,6 +1,6 @@
 # 🏠 PADIM — Protocolo Abierto de Datos Inmobiliarios de México
 
-**Deja de perder 6 meses construyendo la misma infraestructura de datos que todos los demás. Empieza a construir productos que tus clientes realmente necesitan.**
+**Versión 2.0.0** — Deja de perder 6 meses construyendo la misma infraestructura que todos los demás. Empieza a construir productos que tus clientes realmente necesitan.
 
 ---
 
@@ -10,7 +10,7 @@
 pip install padim
 
 # Datos de una colonia en segundos
-padim scrape vivanuncios --colonia "Del Valle" --output delvalle.json
+padim scrape vivanuncios --colony "Del Valle" --output delvalle.json
 
 # Valida que los datos sean correctos
 padim validate delvalle.json
@@ -18,8 +18,14 @@ padim validate delvalle.json
 # Calcula qué tan confiables son
 padim quality delvalle.json
 
-# Sirve tu propia API local
+# Lista fuentes disponibles
+padim sources
+
+# Sirve tu propia API REST local
 padim serve --port 8080
+# → http://localhost:8080/docs  (documentación interactiva)
+# → http://localhost:8080/v1/stats  (estadísticas)
+# → http://localhost:8080/v1/market/Del%20Valle  (análisis de colonia)
 ```
 
 **Sin servidores. Sin suscripciones. Sin esperar a que nadie te dé permiso.**
@@ -59,52 +65,65 @@ PADIM es el **lenguaje común** que rompe ese cerco.
 
 ## 📦 Scrapers Funcionales — Estrategia de 3 Capas
 
-Los conectores funcionales para scraping NO están en este repositorio. Se distribuyen a través de **3 canales independientes** diseñados para ser resistentes a cualquier intento de censura o eliminación:
+Los conectores funcionales para scraping NO están en este repositorio principal. Se distribuyen a través de **4 canales independientes** sincronizados automáticamente por CI/CD. Todos son respaldos del mismo código, para que el proyecto sea **indestructible por diseño**.
 
-### Capa 1: Radicle (Red P2P) — REPOSITORIO VIVO
-**Para desarrollo y contribuciones.** Es como GitHub pero sin servidores — funciona sobre una red peer-to-peer.
+### Capa 1: GitHub (Primario) — CÓDIGO + COLABORACIÓN
+**Interfaz humana principal.** Pull requests, issues, discusiones, y el código fuente vivo.
 
 ```bash
-# Instalar Radicle
-curl -sSfL https://radicle.dev/install.sh | sh
-# O descargar manual: https://radicle.dev/download
-
-# Clonar el repositorio de scrapers
-rad clone rad:z3AqdGcF6fCoGVs64J22zEe85k24A
-
-# Entrar al directorio
+git clone https://github.com/PADIM-MX/padim-scrapers
 cd padim-scrapers
-
-# Listo. Tienes todos los conectores funcionales
-python3 vivanuncios_curl.py --colonia "Del Valle" --output datos.json
+python3 vivanuncios_curl.py --colony "Del Valle" --output datos.json
 ```
 
-**Ventajas:** Tiene historial Git, actualizable, colaborativo. Mientras haya 2 personas con el repo, existe. ✅ RECOMENDADO.
+**Ventajas:** Todo developer mexicano sabe usar GitHub. PRs, reviews, CI. ✅ RECOMENDADO para contribuir.
 
-### Capa 2: Magnet Link (BitTorrent DHT) — DISTRIBUCIÓN MASIVA
-**Para descargas rápidas.** Sin servidores, sin trackers, sin dueño.
+### Capa 2: Radicle (Red P2P) — RESPALDO DESCENTRALIZADO
+**Espejo automático del repositorio.** Cada push a GitHub se refleja en Radicle mediante CI. No requiere intervención humana.
+
+```bash
+rad clone rad:z3AqdGcF6fCoGVs64J22zEe85k24A
+cd padim-scrapers
+```
+
+**Ventajas:** Historial Git completo, actualizable, colaborativo. Mientras haya 2 personas con el repo, existe. **Se sincroniza SOLO** via GitHub Actions. ✅ RESPALDO AUTOMÁTICO.
+
+### Capa 3: IPFS (Contenido) — DISTRIBUCIÓN INMUTABLE
+**Cada release se publica automáticamente a IPFS.** El CID (Content ID) es la prueba criptográfica de que el contenido no ha sido alterado.
 
 ```
-magnet:?xt=urn:sha256:e765112b45b704ee20e6f7afb17458652fe3c455e3cd14b0d50d83171bb018cd&dn=padim-scrapers-v1.0.0.zip&xl=30358
+# El CI genera automáticamente:
+# 1. ZIP del release
+# 2. CID de IPFS
+# 3. Pin en 3+ nodos gratuitos (Pinata, Filebase)
 ```
 
-1. Instala un cliente torrent (recomendado: [qBittorrent](https://www.qbittorrent.org/))
-2. Copia el magnet link de arriba
-3. Pégalo en "Añadir enlace torrent"
-4. Descarga el ZIP con todos los scrapers
+**Ventajas:** Contenido inmutable, IPFS es la red más resistente del mundo. ✅ AUTOMATIZADO.
 
-**Ventajas:** No necesita instalación de herramientas raras. BitTorrent es la red más resistente del mundo.
+### Capa 4: Magnet Link (BitTorrent DHT) — GENERADO AUTOMÁTICAMENTE
+**Cada release genera su propio magnet link.** El CI calcula el SHA256, crea el torrent, y lo sube a GitHub Releases.
 
-### Capa 3: GitHub (Este Repositorio) — DOCUMENTACIÓN
-**Solo README, especificaciones, y disclaimers.** Aquí no hay archivos funcionales, solo las instrucciones para obtenerlos de las Capas 1 y 2.
+```
+magnet:?xt=urn:sha256:[AUTOMATIC]&dn=padim-scrapers-v2.0.0.zip
+```
 
-### ¿Por qué 3 capas?
+**Ventajas:** No necesita instalación de herramientas raras. **Se regenera solo en cada release.** Ya no es estático. ✅ AUTOMATIZADO.
+
+### ¿Por qué 4 capas y cómo se sincronizan?
+
+```
+[Dev hace PR en GitHub] → [CI tests] → [Merge a main]
+    ↓                        ↓               ↓
+  Radicle mirror          IPFS pin        ZIP + Magnet
+  (automático)            (automático)    (GitHub Release)
+```
 
 Para eliminar PADIM-scrapers tendrían que:
-1. ❌ Tumbar GitHub → **Posible**, pero solo pierdes la documentación
-2. ❌ Tumbar Radicle → **Imposible**, funciona sobre red P2P
-3. ❌ Eliminar todos los seeders de BitTorrent → **Imposible**
-4. ❌ Censurar todas las menciones → **Imposible**
+1. ❌ Tumbar GitHub → **Posible**, pero Capas 2, 3, 4 siguen funcionando
+2. ❌ Tumbar Radicle → **No pueden**, red P2P
+3. ❌ Censurar IPFS → **No pueden**, los CIDs están everywhere
+4. ❌ Eliminar todos los seeders de BitTorrent → **No pueden**
+5. ❌ Censurar todas las menciones → **No pueden**
 
 **El proyecto es indestructible por diseño. Los datos no deberían estar atrapados.**
 

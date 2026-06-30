@@ -1,0 +1,86 @@
+{
+  "name": "padim",
+  "version": "2.0.0",
+  "description": "Protocolo Abierto de Datos Inmobiliarios de México",
+  "schema_version": "2.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["source", "source_id", "property_type", "business_type", "price", "currency"],
+  "properties": {
+    "source": {
+      "type": "string",
+      "description": "Fuente de los datos",
+      "enum": [
+        "vivanuncios", "inmuebles24", "propiedades_com", "metroscubicos",
+        "easybroker", "mls",
+        "shf", "catastro", "notarias", "avu", "inegi",
+        "contribucion_directa"
+      ]
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID único en la fuente original"
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL original del listing (si aplica)"
+    },
+    "title": { "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "property_type": {
+      "type": "string",
+      "enum": ["casa", "departamento", "terreno", "local", "oficina", "bodega", "edificio", "nave_industrial", "otro"]
+    },
+    "business_type": {
+      "type": "string",
+      "enum": ["venta", "renta", "traspaso"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "sold", "rented", "inactive", "unknown"]
+    },
+    "price": { "type": "number", "minimum": 0 },
+    "currency": { "type": "string", "default": "MXN" },
+    "price_m2": { "type": ["number", "null"] },
+    "m2_constructed": { "type": ["number", "null"], "minimum": 0 },
+    "m2_land": { "type": ["number", "null"], "minimum": 0 },
+    "bedrooms": { "type": ["integer", "null"], "minimum": 0 },
+    "bathrooms": { "type": ["number", "null"], "minimum": 0 },
+    "parking": { "type": ["integer", "null"], "minimum": 0 },
+    "floors": { "type": ["integer", "null"] },
+    "antiquity": { "type": ["integer", "null"], "description": "Años de antigüedad" },
+    "address": { "type": ["string", "null"] },
+    "colony": { "type": ["string", "null"], "description": "Colonia" },
+    "municipality": { "type": ["string", "null"], "description": "Municipio/Alcaldía" },
+    "state": { "type": ["string", "null"] },
+    "country": { "type": "string", "default": "MX" },
+    "lat": { "type": ["number", "null"], "minimum": -90, "maximum": 90 },
+    "lng": { "type": ["number", "null"], "minimum": -180, "maximum": 180 },
+    "plus_code": { "type": ["string", "null"] },
+    "postal_code": { "type": ["string", "null"] },
+    "features": { "type": "array", "items": { "type": "string" } },
+    "amenities": { "type": "array", "items": { "type": "string" } },
+    "condition": {
+      "type": ["string", "null"],
+      "enum": ["nueva", "usada", "remodelada", "obra_gris", null]
+    },
+    "images": { "type": "array", "items": { "type": "string", "format": "uri" } },
+    "agent_name": { "type": ["string", "null"] },
+    "agent_agency": { "type": ["string", "null"] },
+    "agent_phone": { "type": ["string", "null"] },
+    "agent_email": { "type": ["string", "null"], "format": "email" },
+    "trust_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "freshness_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "quality_grade": {
+      "type": "string",
+      "enum": ["EXCELLENT", "GOOD", "FAIR", "POOR", "STALE", "TRASH"]
+    },
+    "is_relevant": { "type": "boolean" },
+    "is_suspicious": { "type": "boolean" },
+    "signals": { "type": "array", "items": { "type": "string" } },
+    "scraped_at": { "type": "string", "format": "date-time" },
+    "last_updated": { "type": "string", "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

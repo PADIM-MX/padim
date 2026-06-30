@@ -1,9 +1,9 @@
 # 📜 PADIM — Manifiesto del Protocolo Abierto de Datos Inmobiliarios de México
 
-**Versión:** 1.0.0  
-**Fecha:** 23 de Junio de 2026  
+**Versión:** 2.0.0  
+**Fecha:** 30 de Junio de 2026  
 **Dominio:** PADIM.enmexico.casa  
-**Repositorio:** [Por definir — GitHub pending]
+**Repositorio:** https://github.com/PADIM-MX/padim
 
 ---
 
