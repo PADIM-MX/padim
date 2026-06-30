@@ -166,10 +166,10 @@ def _universal_scrape(source: str, colony: str) -> list:
     import re
 
     urls = {
-        "vivanuncios": f"https://www.vivanuncios.com.mx/s-{colony.lower().replace(' ','-')}/v1c1098l10001p1",
-        "inmuebles24": f"https://www.inmuebles24.com/{colony.lower().replace(' ','-')}.html",
-        "propiedades": f"https://www.propiedades.com/{colony.lower().replace(' ','-')}.html",
-        "easybroker": f"https://www.easybroker.com/mx/propiedades/{colony.lower().replace(' ','-')}",
+        "vivanuncios": f"https://www.vivanuncios.com.mx/s-venta-inmuebles/{colony.lower().replace(' ','-').replace('+','-')}/v1c1097p1",
+        "inmuebles24": f"https://www.inmuebles24.com/{colony.lower().replace(' ','-').replace('+','-')}.html",
+        "propiedades": f"https://www.propiedades.com/{colony.lower().replace(' ','-').replace('+','-')}.html",
+        "easybroker": f"https://www.easybroker.com/mx/propiedades/{colony.lower().replace(' ','-').replace('+','-')}",
     }
 
     url = urls.get(source)
@@ -212,6 +212,36 @@ def _universal_scrape(source: str, colony: str) -> list:
     return _parse_listings(html, source, url, colony)
 
 
+def _map_vivanuncios_type(real_estate_type) -> str:
+    """Mapea tipos de Vivanuncios al schema PADIM."""
+    if isinstance(real_estate_type, dict):
+        name = real_estate_type.get("name", "")
+    else:
+        name = str(real_estate_type)
+    mapping = {
+        "Casa": "casa", "Casas": "casa",
+        "Departamento": "departamento", "Departamentos": "departamento",
+        "Terreno": "terreno", "Terrenos": "terreno",
+        "Local": "local", "Locales comerciales": "local",
+        "Oficina": "oficina", "Oficinas": "oficina",
+        "Bodega": "bodega", "Bodegas": "bodega",
+        "Nave industrial": "nave_industrial",
+        "Edificio": "edificio",
+        "Desarrollo": "otro",
+    }
+    return mapping.get(name, "otro")
+
+
+def _map_operation(operation_name: str) -> str:
+    """Mapea tipo de operación."""
+    mapping = {
+        "Venta": "venta",
+        "Renta": "renta",
+        "Traspaso": "traspaso",
+    }
+    return mapping.get(operation_name, "venta")
+
+
 def _parse_listings(html: str, source: str, base_url: str, colony: str) -> list:
     """Parser universal de listings desde HTML."""
     import re
@@ -219,7 +249,45 @@ def _parse_listings(html: str, source: str, base_url: str, colony: str) -> list:
 
     listings = []
 
-    # Intentar JSON-LD primero
+    # ── Estrategia 1: PRELOADED_STATE (Vivanuncios con React) ──
+    m = re.search(
+        r'<script id="preloadedData">\s*window\.__PRELOADED_STATE__\s*=\s*(\{.+?\});',
+        html, re.DOTALL
+    )
+    if m:
+        try:
+            data = _json.loads(m.group(1))
+            postings = data.get("listStore", {}).get("listPostings", [])
+            for item in postings:
+                price_info = item.get("priceOperationTypes", [{}])[0]
+                prices = price_info.get("prices", [{}])
+                amount = prices[0].get("amount", 0) if prices else 0
+                currency = prices[0].get("currency", "MN") if prices else "MN"
+
+                listing = {
+                    "source": source,
+                    "source_id": str(item.get("postingId", "")),
+                    "source_url": base_url,
+                    "title": item.get("title", ""),
+                    "description": item.get("generatedTitle", ""),
+                    "property_type": _map_vivanuncios_type(item.get("realEstateType", "")),
+                    "business_type": _map_operation(price_info.get("operationType", {}).get("name", "Venta")),
+                    "price": int(amount) if amount else 0,
+                    "currency": "MXN" if currency == "MN" else currency,
+                    "colony": colony.title(),
+                    "images": [],
+                    "scraped_at": datetime.now(timezone.utc).isoformat(),
+                    "agent_name": item.get("publisher", {}).get("name") if isinstance(item.get("publisher"), dict) else None,
+                }
+                if listing["price"] > 1000 and listing["title"]:
+                    listings.append(listing)
+
+            if listings:
+                return listings
+        except Exception:
+            pass
+
+    # ── Estrategia 2: JSON-LD ──
     jsonlds = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.DOTALL)
     for j in jsonlds:
         try:
@@ -414,8 +482,8 @@ def start_server(port: int = 8080):
         def get_market(colony: str):
             """Estadísticas de mercado para una colonia."""
             relevant = [p for p in properties_cache
-                        if colony.lower() in p.get("colony", "").lower()
-                        or colony.lower() in p.get("colonia", "").lower()]
+                        if colony.lower().replace('-',' ') in p.get("colony", "").lower().replace('-',' ')
+                        or colony.lower().replace('-',' ') in p.get("colonia", "").lower().replace('-',' ')]
             prices = [p["price"] for p in relevant if p.get("price", 0) > 0]
             if not prices:
                 return {"colony": colony, "error": "Sin datos para esta colonia"}
