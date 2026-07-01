@@ -51,9 +51,9 @@ def run_trust_engine(data: list | dict) -> list | dict:
         items = data if isinstance(data, list) else [data]
         results = []
         for item in items:
-            # Ejecutar sync (el método analyze es async, lo envolvemos)
+            # Ejecutar sync (el método analyze es sync en v2)
             try:
-                result = asyncio.run(engine.analyze(
+                result = engine.analyze(
                     property_id=item.get("source_id", str(item.get("fingerprint", "unknown"))),
                     source=item.get("source", item.get("portal", "unknown")),
                     title=item.get("title", item.get("titulo", "")),
@@ -69,7 +69,7 @@ def run_trust_engine(data: list | dict) -> list | dict:
                     municipality=item.get("municipality", ""),
                     agent_name=item.get("agent_name", None),
                     agent_properties_count=0,
-                ))
+                )
                 item["trust_score"] = round(result.trust_score, 2)
                 item["is_relevant"] = result.is_relevant
                 item["is_suspicious"] = result.is_suspicious
@@ -102,29 +102,44 @@ SCRAPER_SOURCES = {
         "name": "EasyBroker",
         "url": "https://www.easybroker.com",
     },
+    "lamudi": {
+        "name": "Lamudi",
+        "url": "https://www.lamudi.com.mx",
+    },
 }
 
 
 def scrape_source(source: str, colony: str, output: str) -> int:
     """
-    Ejecuta scraper real delegando a los conectores en padim-scrapers/
-    o usando el engine universal.
-
-    Prioridad:
-    1) Si existe el scraper dedicado en ~/.padim/scrapers/{source}.py, lo usa
-    2) Si no, usa el hybrid_scraper universal
+    Ejecuta scraper real delegando a:
+    1) PADIMScraper nativo (tiene conectores Inmuebles24, Vivanuncios, Lamudi funcionales)
+    2) Scraper dedicado en ~/.padim/scrapers/{source}.py
+    3) Engine universal (httpx + parsers)
     """
-    scrapers_dir = Path.home() / ".padim" / "scrapers"
-    dedicated = scrapers_dir / f"{source}.py"
+    data = None
 
-    if dedicated.exists():
-        # Usar scraper dedicado
-        sys.path.insert(0, str(scrapers_dir))
-        import importlib
-        mod = importlib.import_module(source)
-        data = mod.scrape(colony=colony)
-    else:
-        # Usar scraper universal (httpx + parsers)
+    # 1) Intentar PADIMScraper nativo
+    try:
+        from padim.scrapers.scraper_padim import PADIMScraper
+        padim_scraper = PADIMScraper()
+        data = padim_scraper.scrape(portal=source)
+        if data:
+            print(f"  ✅ Scraper nativo PADIM: {len(data)} propiedades")
+    except Exception as e:
+        print(f"  ⚠️  Scraper nativo no disponible: {e}")
+
+    # 2) Scraper dedicado en ~/.padim/scrapers/
+    if not data:
+        scrapers_dir = Path.home() / ".padim" / "scrapers"
+        dedicated = scrapers_dir / f"{source}.py"
+        if dedicated.exists():
+            sys.path.insert(0, str(scrapers_dir))
+            import importlib
+            mod = importlib.import_module(source)
+            data = mod.scrape(colony=colony)
+
+    # 3) Engine universal
+    if not data:
         data = _universal_scrape(source, colony)
 
     if not data:
@@ -552,10 +567,82 @@ def start_server(port: int = 8080):
 # ── CLI COMMANDS ─────────────────────────────────────────────────
 
 def cmd_scrape(args):
-    """Scrapea propiedades de una fuente."""
+    """Scrapea propiedades de una fuente usando PADIMScraper."""
     print(f"📡 Scrapeando {args.source} para colonia: {args.colony}")
     print(f"   Output: {args.output}")
-    return scrape_source(args.source, args.colony, args.output)
+    
+    try:
+        from padim.scrapers.scraper_padim import PADIMScraper
+        scraper = PADIMScraper()
+        propiedades = scraper.scrape(portal=args.source)
+    except ImportError as e:
+        print(f"  ❌ Error importando PADIMScraper: {e}")
+        print(f"  💡 Asegúrate de tener instaladas las dependencias: scrapling, yaml")
+        return 1
+    except Exception as e:
+        print(f"  ❌ Error durante scraping: {e}")
+        return 1
+
+    if not propiedades:
+        print(f"  ⚠️  No se encontraron propiedades para '{args.colony}' en {args.source}")
+        return 1
+
+    # Normalizar a schema PADIM
+    def _normalize_to_schema(prop: dict) -> dict:
+        return {
+            "source": args.source,
+            "source_id": prop.get("fingerprint", prop.get("url", "")),
+            "source_url": prop.get("url", ""),
+            "title": prop.get("titulo", ""),
+            "description": prop.get("descripcion") or None,
+            "property_type": prop.get("tipo_inmueble", "otro"),
+            "business_type": prop.get("tipo_operacion", "venta"),
+            "price": prop.get("precio_mxn", prop.get("precio", 0)),
+            "currency": "MXN",
+            "price_m2": None,
+            "m2_constructed": prop.get("metros_cuadrados") or None,
+            "m2_land": prop.get("metros_terreno") or None,
+            "bedrooms": prop.get("recamaras") or None,
+            "bathrooms": prop.get("banos") or None,
+            "parking": None,
+            "address": prop.get("direccion", ""),
+            "colony": prop.get("colonia", ""),
+            "municipality": "",
+            "state": prop.get("estado", ""),
+            "lat": prop.get("latitud") or None,
+            "lng": prop.get("longitud") or None,
+            "images": prop.get("fotos", []),
+            "agent_name": None,
+            "scraped_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+    normalized = [_normalize_to_schema(p) for p in propiedades]
+
+    # Validar contra schema
+    valid, errors = validate_against_schema(normalized)
+    if not valid:
+        print(f"  ⚠️  {len(errors)} errores de validación (continuando de todas formas):")
+        for e in errors[:3]:
+            print(f"       • {e}")
+
+    # Trust Engine
+    print(f"  🧠 Calculando trust scores...")
+    scored = run_trust_engine(normalized)
+
+    # Guardar
+    output_path = Path(args.output)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w") as f:
+        json.dump(scored, f, indent=2, ensure_ascii=False)
+
+    total = len(scored)
+    real = sum(1 for p in scored if p.get("is_relevant", True) and p.get("trust_score", 0.5) >= 0.3)
+    ghosts = sum(1 for p in scored if not p.get("is_relevant", True))
+    suspicious = sum(1 for p in scored if p.get("is_suspicious", False))
+
+    print(f"  ✅ {total} propiedades → {real} reales, {ghosts} fantasma, {suspicious} sospechosas")
+    print(f"  📁 Guardado en {output_path}")
+    return 0
 
 
 def cmd_validate(args):
@@ -604,7 +691,10 @@ def cmd_quality(args):
 
 
 def cmd_serve(args):
-    """Sirve una API local con los datos."""
+    """Sirve una API local con los datos. Si no hay datos, intenta scrapear primero."""
+    data_file = Path("padim_data.json")
+    if not data_file.exists():
+        print("  📡 No se encontraron datos locales. Intenta ejecutar 'padim scrape' primero.")
     return start_server(port=args.port)
 
 
