@@ -1,0 +1,13 @@
+{
+  "project": "PADIM",
+  "version": "2.0.0",
+  "last_update": "2026-07-01T09:24:12.122441",
+  "sources": [
+    "vivanuncios",
+    "inmuebles24",
+    "propiedades_com",
+    "easybroker"
+  ],
+  "status": "operational",
+  "notes": "Scraping diario completado. Dataset disponible en releases."
+}
