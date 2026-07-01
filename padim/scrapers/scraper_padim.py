@@ -30,8 +30,34 @@ CONFIG_PATH = BASE_DIR / "config.yaml"
 
 
 def load_config() -> dict:
+    """Carga config desde YAML con fallback a defaults."""
+    if not HAS_SCRAPLING:
+        log.warning("Scrapling/yaml no instalado, usando config por defecto")
+        return _default_config()
     with open(CONFIG_PATH) as f:
         return yaml.safe_load(f)
+
+
+def _default_config() -> dict:
+    """Config por defecto cuando YAML no está disponible."""
+    return {
+        "settings": {
+            "max_properties_per_portal": 3,
+            "max_detail_retries": 1,
+            "request_delay": 0.5,
+            "output_file": "data/propiedades.jsonl",
+        },
+        "portals": {
+            "lamudi": {
+                "enabled": True,
+                "fetcher": "dynamic",
+                "solve_cloudflare": False,
+                "base_url": "https://www.lamudi.com.mx",
+                "listing_url": "https://www.lamudi.com.mx/for-sale/",
+                "detail_pattern": "/detalle/",
+            }
+        }
+    }
 
 
 def fingerprint(prop: dict) -> str:
@@ -648,6 +674,11 @@ class LamudiConnector:
 
 def run_portal(name: str, cfg_portal: dict, settings: dict, seen: set):
     log.info(f"═══ {name.upper()} ═══")
+    
+    if not HAS_SCRAPLING:
+        log.error("Scrapling no instalado. Usa: pip install scrapling curl-cffi browserforge patchright")
+        return
+    
     fetcher_type = cfg_portal["fetcher"]
     max_props = settings.get("max_properties_per_portal", 5)
 

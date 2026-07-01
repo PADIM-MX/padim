@@ -12,7 +12,7 @@
       "description": "Fuente de los datos",
       "enum": [
         "vivanuncios", "inmuebles24", "propiedades_com", "metroscubicos",
-        "easybroker", "mls",
+        "easybroker", "lamudi", "mls",
         "shf", "catastro", "notarias", "avu", "inegi",
         "contribucion_directa"
       ]
