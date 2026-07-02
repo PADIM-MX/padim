@@ -23,6 +23,7 @@
             --mono: 'JetBrains Mono', 'Fira Code', monospace;
             --pad-sec: 6rem 0;
             --pad-card: 2rem;
+            --fs-min: 0.75rem;   /* tamaño mínimo legible */
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -571,42 +572,75 @@
         }
 
         /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 2.8rem; }
+            .wrap { padding: 0 2.5rem; }
+        }
+
         @media (max-width: 768px) {
             .wrap { padding: 0 1.5rem; }
-            .topbar { padding: 1.25rem 0; }
-            .topbar nav { gap: 1rem; font-size: 0.78rem; }
-            .logo { font-size: 1.15rem; }
+            .topbar { padding: 1.25rem 0; flex-wrap: wrap; gap: 0.75rem; }
+            .topbar nav { gap: 1rem; font-size: 0.82rem; }
+            .logo { font-size: 1.5rem; }
             .hero { padding: 4rem 0 3rem; }
+            .hero .tag { font-size: 0.75rem; margin-bottom: 1.25rem; }
             .hero h1 { font-size: 2.2rem; }
             .hero p { font-size: 0.95rem; }
             .search-wrap { flex-wrap: wrap; padding: 0.75rem; gap: 0.5rem; }
-            .search-wrap input { width: 100%; }
-            .search-wrap select { flex:1; min-width:0; }
-            .search-wrap button { width: 100%; }
+            .search-wrap input { width: 100%; font-size: 0.95rem; }
+            .search-wrap select { flex:1; min-width:0; font-size: 0.82rem; padding: 0.6rem 0.75rem; }
+            .search-wrap button { width: 100%; font-size: 0.95rem; padding: 0.8rem 2rem; }
+            .hero-hints kbd { font-size: 0.72rem; padding: 0.2rem 0.45rem; }
             .metrics { grid-template-columns: 1fr 1fr; margin-top: -1.5rem; }
             .metric { padding: 1.5rem 1rem; }
             .metric .num { font-size: 1.8rem; }
+            .metric .label { font-size: 0.7rem; }
+            .metric .sub { font-size: 0.65rem; }
             .trust-demo { grid-template-columns: 1fr; }
+            .trust-item .ts { font-size: 1.8rem; }
+            .trust-item .ts-desc { font-size: 0.85rem; }
             .phil-grid { grid-template-columns: 1fr; }
             .source-grid { grid-template-columns: 1fr 1fr; }
-            .props-table { font-size: 0.72rem; }
-            .props-table th,
-            .props-table td { padding: 0.6rem 0.6rem; }
-            .props-table .prop-title { max-width: 120px; }
             section { --pad-sec: 4rem 0; }
             h2 { font-size: 1.5rem; }
-            .hero-hints kbd { font-size: 0.7rem; padding: 0.15rem 0.4rem; }
+            .section-label { font-size: 0.65rem; }
+            .props-table { font-size: 0.75rem; }
+            .props-table th,
+            .props-table td { padding: 0.65rem 0.6rem; }
+            .props-table .prop-title { max-width: 120px; font-size: 0.75rem; }
+            .table-legend { font-size: 0.72rem; gap: 0.75rem; flex-wrap: wrap; }
+            footer .tagline { font-size: 0.8rem; }
+            footer .licenses { gap: 0.75rem; }
+            footer .licenses a { font-size: 0.7rem; }
+            footer .motto { font-size: 0.7rem; flex-wrap: wrap; gap: 0.35rem; }
+            .phil-card .phil-value { font-size: 0.9rem; }
+            .phil-card .phil-sub,
+            .phil-card .phil-sub-yellow { font-size: 0.7rem; }
+            .magnet-link { font-size: 0.65rem; padding: 0.85rem 1rem; }
         }
 
         @media (max-width: 480px) {
             .wrap { padding: 0 1rem; }
-            .topbar nav { gap: 0.6rem; font-size: 0.7rem; }
+            .topbar { padding: 1rem 0; gap: 0.5rem; }
+            .topbar nav { gap: 0.5rem; font-size: 0.75rem; }
+            .logo { font-size: 1.25rem; }
+            .hero { padding: 3rem 0 2rem; }
             .hero h1 { font-size: 1.7rem; }
-            .metrics { grid-template-columns: 1fr 1fr; }
+            .hero .tag { font-size: 0.7rem; letter-spacing: 0.15em; }
+            .hero p { font-size: 0.88rem; }
+            .metrics { grid-template-columns: 1fr 1fr; gap: 0.5px; }
+            .metric .num { font-size: 1.4rem; }
             .source-grid { grid-template-columns: 1fr; }
+            .props-table { font-size: 0.7rem; }
+            .props-table td,
+            .props-table th { padding: 0.5rem 0.4rem; }
+            .props-table .prop-title { max-width: 90px; font-size: 0.7rem; }
             .btn-group { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
-            .table-legend { flex-direction: column; gap: 0.3rem; }
+            .btn { width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.75rem 1.5rem; }
+            .table-legend { flex-direction: column; gap: 0.25rem; }
+            section { --pad-sec: 3rem 0; }
+            h2 { font-size: 1.25rem; }
+            .motto-flag svg { width: 16px; height: 11px; }
         }
     </style>
 </head>
