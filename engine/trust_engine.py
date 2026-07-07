@@ -30,7 +30,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 import hashlib
 
-logger = logging.getLogger("backbone.trust_engine")
+logger = logging.getLogger("padim.trust_engine")
 
 # ═══════════════════════════════════════════════════════════════
 # MODELO DE SEÑALES

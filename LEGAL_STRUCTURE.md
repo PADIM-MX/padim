@@ -1,10 +1,14 @@
 # PADIM — Estructura Legal y Gobierno
 
-## Situación Actual (v2.0.0)
+## Situación Actual (v2.1.0)
 
-PADIM opera actualmente sin personería jurídica. El repositorio está bajo la
-organización `PADIM-MX` en GitHub. Los contribuidores individuales son
-responsables de sus propias contribuciones.
+PADIM opera actualmente sin personería jurídica. El repositorio principal
+(`PADIM-MX/padim`) contiene solo el estándar, engine y CLI. Los scrapers
+funcionales se han migrado a un repositorio separado:
+
+- **Repositorio de scrapers:** `PADIM-MX/padim-scrapers`
+- **Licencia:** BSL 1.1 (Business Source License)
+- **Estado:** ✅ Repositorio creado (v2.0.0)
 
 ## Riesgo Legal Identificado
 

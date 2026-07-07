@@ -207,9 +207,13 @@ PADIM te da el poder de los datos. Cuando necesites **escalar**, **BACKBONE** es
 
 ## 📜 Licencia
 
-- **Estándar (spec/)**: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — Dominio Público
-- **Herramientas (cli/, engine/)**: [MIT](LICENSE)
-- **Scrapers funcionales**: Distribuidos bajo Radicle + Magnet Links (ver sección "Scrapers Funcionales")
+| Componente | Licencia | Archivo |
+|-----------|----------|---------|
+| **Estándar (spec/)** | [CC0 1.0](spec/LICENSE) — Dominio público | [spec/LICENSE](spec/LICENSE) |
+| **Trust Engine (engine/)** | [AGPL v3](engine/LICENSE) — Copyleft fuerte | [engine/LICENSE](engine/LICENSE) |
+| **CLI (cli/)** | [MIT](cli/LICENSE) — Permisiva | [cli/LICENSE](cli/LICENSE) |
+| **Datos** | [ODbL v1.0](LICENSE-ODbL.md) — Atribución + Share-Alike | [LICENSE-ODbL.md](LICENSE-ODbL.md) |
+| **Raíz del proyecto** | Explicación de sub-licencias | [LICENSE](LICENSE) |
 
 ---
 

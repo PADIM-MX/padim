@@ -1,0 +1,33 @@
+# GNU AFFERO GENERAL PUBLIC LICENSE — Version 3
+
+## Aplicación
+
+El directorio `engine/` contiene el Trust Engine de PADIM: sistema de validación, 
+deduplicación y cálculo de confianza de datos. Este componente es estratégico 
+para el ecosistema y está protegido por **AGPL v3**.
+
+### ¿Qué implica AGPL v3?
+
+- Cualquier persona puede usar, modificar y redistribuir el código.
+- Si modificas el código y lo ejecutas como un servicio de red (API, SaaS),
+  **debes publicar tus modificaciones** bajo la misma licencia AGPL v3.
+- El uso comercial directo del Trust Engine como parte de un servicio requiere
+  que el servicio completo se distribuya bajo AGPL v3.
+
+### Excepción para BACKBONE
+
+BACKBONE (`https://back-bone.dev`) tiene una **licencia comercial separada** 
+que le permite usar el Trust Engine como parte de su API SaaS sin publicar 
+sus modificaciones. Contacta a info@back-bone.dev para más información.
+
+---
+
+Para ver el texto completo de AGPL v3, visita:
+https://www.gnu.org/licenses/agpl-3.0.html
+
+O copia el archivo `LICENSE-AGPL3` de la raíz del proyecto.
+
+---
+
+*Este directorio NO está bajo la licencia MIT de la raíz del proyecto.*
+*La licencia aplicable es AGPL v3.*

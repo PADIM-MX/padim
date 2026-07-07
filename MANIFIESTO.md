@@ -175,7 +175,7 @@ PADIM se construye con la participación de quienes decidan sumarse. No hay una 
 
 ## VI. De la Relación con BACKBONE
 
-BACKBONE (`https://back-bone.dev`) es la primera API de datos inmobiliarios de México. Es la **implementación de referencia** del protocolo PADIM en su versión enterprise.
+BACKBONE (`https://back-bone.dev`) es la primera API de datos inmobiliarios de México. Es una **implementación del estándar PADIM** en su versión enterprise.
 
 La relación es complementaria:
 

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /docs/
+Disallow: /repo
+
+Sitemap: https://padim.enmexico.casa/sitemap.xml
+
+# PADIM — Protocolo Abierto de Datos Inmobiliarios de México
+# Los scrapers se distribuyen desde PADIM-MX/padim-scrapers
+# Este sitio no almacena datos personales

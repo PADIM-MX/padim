@@ -1,10 +1,22 @@
 # Fragmento para agregar al final de /etc/caddy/Caddyfile
+# PADIM — padim.enmexico.casa (v2.1.0)
 # Ya existe el A record: padim.enmexico.casa → 74.208.40.123
 
 padim.enmexico.casa {
     root * /home/polaris/workspace/projects/BACKBONE/padim/site
-    file_server
     encode gzip zstd
+
+    # Aviso legal (extensionless URL)
+    handle /aviso-legal {
+        rewrite * /aviso-legal.html
+        file_server
+    }
+
+    # Términos de servicio (extensionless URL)
+    handle /terminos {
+        rewrite * /terminos.html
+        file_server
+    }
 
     # Docs de la especificación
     handle /docs/* {
@@ -15,6 +27,11 @@ padim.enmexico.casa {
     # Redirect a GitHub
     handle /repo {
         redir https://github.com/PADIM-MX/padim permanent
+    }
+
+    # Archivos estáticos (robots.txt, sitemap.xml, index.html, etc.)
+    handle {
+        file_server
     }
 
     header {

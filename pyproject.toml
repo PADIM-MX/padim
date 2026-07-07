@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "padim"
-version = "2.0.0"
+version = "2.1.0"
 description = "Protocolo Abierto de Datos Inmobiliarios de México"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Multi-license (CC0/AGPL/MIT/ODbL)"}
 requires-python = ">=3.11"
 authors = [
     {name = "PADIM Contributors"},
@@ -23,7 +23,8 @@ dependencies = [
 [project.urls]
 Home = "https://PADIM.enmexico.casa"
 Source = "https://github.com/PADIM-MX/padim"
-BACKBONE = "https://back-bone.dev"
+Scrapers = "https://github.com/PADIM-MX/padim-scrapers"
+BACKBONE_url = "https://back-bone.dev"
 
 [project.scripts]
 padim = "padim.cli.main:main"

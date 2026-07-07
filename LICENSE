@@ -1,21 +1,50 @@
-MIT License
+# PADIM — Licencias por Componente
 
-Copyright (c) 2026 PADIM Contributors
+PADIM es un proyecto multi-componente. **Cada componente tiene su propia licencia** 
+para optimizar la protección legal y fomentar la adopción del estándar.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## Tabla de Licencias
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+| Componente | Directorio | Licencia | Propósito |
+|-----------|-----------|----------|-----------|
+| **Estándar (spec)** | `spec/` | [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) | Dominio público — máxima adopción del estándar |
+| **Trust Engine** | `engine/` | [AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html) | Copyleft fuerte — protege el componente estratégico |
+| **CLI** | `cli/` | [MIT](https://opensource.org/licenses/MIT) | Permisiva — herramientas generales |
+| **Conectores (scrapers)** | `PADIM-MX/padim-scrapers` | BSL 1.1 | Uso comercial requiere licencia |
+| **Datos** | N/A (dataset) | [ODbL v1.0](https://opendatacommons.org/licenses/odbl/1.0/) | Atribución + Share-Alike |
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## Archivos de Licencia
+
+- `spec/LICENSE` — CC0 1.0 Universal
+- `engine/LICENSE` — AGPL v3
+- `cli/LICENSE` — MIT
+- `LICENSE-ODbL.md` — ODbL v1.0 para datos
+- `LICENSE` (este archivo) — Explicación de sub-licencias
+
+## Preguntas Frecuentes
+
+### ¿Puedo usar el estándar PADIM en mi proyecto comercial?
+**Sí.** El estándar (`spec/`) es CC0 — dominio público. No hay restricciones.
+
+### ¿Puedo usar el Trust Engine en mi API comercial?
+**Depende.** Si distribuyes modificaciones, AGPL lo permite. Si usas el Trust 
+Engine como parte de un servicio SaaS sin distribuir modificaciones, AGPL 
+requiere que publiques los cambios. Para uso comercial sin restricciones, 
+contacta a info@back-bone.dev para una licencia comercial.
+
+### ¿Puedo usar el CLI en mi proyecto?
+**Sí.** El CLI (`cli/`) es MIT — sin restricciones.
+
+### ¿Puedo usar los datos en mi app?
+**Sí, con atribución y share-alike.** Los datos están bajo ODbL v1.0. Si 
+modificas y redistribuyes el dataset, debes mantenerlo bajo ODbL.
+
+### ¿Qué pasa con los scrapers?
+Los scrapers viven en un repositorio separado: `PADIM-MX/padim-scrapers`, 
+bajo BSL 1.1. El uso comercial de los scrapers como servicio requiere una 
+licencia separada.
+
+---
+
+*Copyright (c) 2026 PADIM Contributors*
+*Licencias individuales por directorio — ver archivos LICENSE en cada subdirectorio*

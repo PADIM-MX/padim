@@ -1,7 +1,10 @@
-PADIM Scrapers v1.0.0
-Hash SHA256: e765112b45b704ee20e6f7afb17458652fe3c455e3cd14b0d50d83171bb018cd
-Tamaño: 30358 bytes (29.6 KB)
-Magnet: magnet:?xt=urn:sha256:e765112b45b704ee20e6f7afb17458652fe3c455e3cd14b0d50d83171bb018cd&dn=padim-scrapers-v1.0.0.zip&xl=30358
+PADIM Scrapers v2.0.0
+Los scrapers se han migrado a un repositorio independiente:
+https://github.com/PADIM-MX/padim-scrapers
 
-Para descargar: copia el magnet link en tu cliente torrent
-Cliente recomendado: qBittorrent (gratis, https://www.qbittorrent.org)
+Para descargar el código fuente:
+  git clone https://github.com/PADIM-MX/padim-scrapers
+  cd padim-scrapers
+  pip install -e .
+
+El magnet link se generará automáticamente en el CI/CD del nuevo repo.

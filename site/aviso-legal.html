@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviso Legal — PADIM</title>
+    <meta name="description" content="Aviso legal integral del Protocolo Abierto de Datos Inmobiliarios de México (PADIM).">
+    <style>
+        :root {
+            --bg: #060608;
+            --bg-card: #0b0b0e;
+            --border: #1c1c22;
+            --text: #c8c8cc;
+            --text-dim: #6b6b76;
+            --text-bright: #f0f0f4;
+            --accent: #f0c040;
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrap { max-width: 820px; margin:0 auto; padding:2rem 1.5rem 6rem; }
+
+        /* Header */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.5rem 0; border-bottom: 1px solid var(--border); margin-bottom: 3rem;
+        }
+        .logo {
+            font-family: var(--mono); font-size: 1.5rem; font-weight: 800;
+            color: var(--text-bright); text-decoration: none; letter-spacing: 0.08em;
+        }
+        .logo span { color: var(--accent); }
+        .topbar nav a {
+            color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+            margin-left: 1.5rem; transition: color .2s;
+        }
+        .topbar nav a:hover { color: var(--text-bright); }
+
+        /* Content */
+        h1 { font-size: 2rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+        .version {
+            font-family: var(--mono); font-size: 0.8rem; color: var(--text-dim);
+            margin-bottom: 2.5rem;
+        }
+        h2 {
+            font-size: 1.25rem; color: var(--accent); margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+        }
+        h3 { font-size: 1rem; color: var(--text-bright); margin: 1.5rem 0 0.75rem; }
+        p { margin-bottom: 1rem; }
+        strong { color: var(--text-bright); }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        blockquote {
+            border-left: 3px solid var(--accent); padding: 0.75rem 1.25rem;
+            margin: 1rem 0; background: var(--bg-card); border-radius: 0 6px 6px 0;
+            font-size: 0.9rem; color: var(--text-dim);
+        }
+
+        table {
+            width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem;
+            font-size: 0.85rem;
+        }
+        th, td {
+            border: 1px solid var(--border); padding: 0.6rem 0.75rem;
+            text-align: left;
+        }
+        th { background: var(--bg-card); color: var(--text-bright); font-weight: 600; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+        hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+        /* Footer */
+        .footer {
+            margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);
+            text-align: center; font-size: 0.8rem; color: var(--text-dim);
+        }
+        .footer a { color: var(--text-dim); margin: 0 0.5rem; }
+        .footer a:hover { color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .wrap { padding: 1.5rem 1rem 4rem; }
+            h1 { font-size: 1.5rem; }
+            .topbar { flex-direction: column; gap: 1rem; }
+            table { font-size: 0.75rem; }
+            th, td { padding: 0.4rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+        <a href="/" class="logo">PADIM<span>.</span></a>
+        <nav>
+            <a href="/">← Inicio</a>
+            <a href="https://github.com/PADIM-MX/padim">GitHub</a>
+            <a href="/terminos">Términos</a>
+        </nav>
+    </div>
+
+    <!-- Title -->
+    <h1>Aviso Legal</h1>
+    <p class="version">Versión 1.0.0 · Última actualización: 03 de julio de 2026</p>
+
+    <blockquote>
+        <strong>ESTE NO ES UN AVISO DE PRIVACIDAD.</strong> PADIM es un proyecto open source que NO recolecta datos personales de visitantes de su sitio web ni de su repositorio público. El presente documento es un <strong>aviso legal integral</strong> que cumple con las obligaciones de transparencia, disclaimers de responsabilidad, y cláusulas de uso aceptable aplicables al proyecto.
+    </blockquote>
+
+    <!-- 1. NATURALEZA DEL PROYECTO -->
+    <h2>1. Naturaleza del Proyecto</h2>
+
+    <p><strong>1.1.</strong> PADIM es un proyecto de <strong>código abierto independiente</strong> que promueve el acceso abierto a datos del mercado inmobiliario mexicano mediante:</p>
+    <ul style="margin:0.5rem 0 1rem 1.5rem;color:var(--text-dim);">
+        <li>Un <strong>estándar abierto</strong> (esquema JSON público).</li>
+        <li><strong>Herramientas</strong> de código fuente (CLI, motor de calidad, motor de confianza).</li>
+        <li><strong>Documentación</strong> y manifiestos públicos.</li>
+        <li><strong>Conectores de extracción</strong> distribuidos por canales descentralizados (Radicle, magnet links, IPFS).</li>
+    </ul>
+
+    <p><strong>1.2.</strong> PADIM <strong>NO es:</strong></p>
+    <ul style="margin:0.5rem 0 1rem 1.5rem;color:var(--text-dim);">
+        <li>❌ Una empresa, persona moral o entidad con fines de lucro.</li>
+        <li>❌ Un proveedor de datos inmobiliarios.</li>
+        <li>❌ Un servicio SaaS de pago.</li>
+        <li>❌ Una plataforma de venta de bases de datos.</li>
+        <li>❌ Afiliado, patrocinado, respaldado o relacionado comercialmente con <strong>back-bone.dev</strong> (BACKBONE), <strong>polaris.pw</strong>, <strong>visionnorth.mx</strong>, ni con cualquier otra empresa del fundador o contribuidores.</li>
+    </ul>
+
+    <p><strong>1.3.</strong> Hasta la constitución formal de <strong>PADIM A.C.</strong> (planeada para Q4 2026), este proyecto <strong>no tiene personería jurídica propia</strong>.</p>
+
+    <hr>
+
+    <!-- 2. RESPONSABLE -->
+    <h2>2. Responsable y Representante</h2>
+
+    <table>
+        <tr><th>Concepto</th><th>Dato</th></tr>
+        <tr><td><strong>Proyecto</strong></td><td>PADIM (Protocolo Abierto de Datos Inmobiliarios de México)</td></tr>
+        <tr><td><strong>Mantenido por</strong></td><td>Comunidad de contribuidores open source</td></tr>
+        <tr><td><strong>Organización GitHub</strong></td><td><a href="https://github.com/PADIM-MX">github.com/PADIM-MX</a></td></tr>
+        <tr><td><strong>Sitio web</strong></td><td><a href="https://padim.enmexico.casa">padim.enmexico.casa</a></td></tr>
+        <tr><td><strong>Contacto</strong></td><td><a href="mailto:riuag7@protonmail.com">riuag7@protonmail.com</a></td></tr>
+        <tr><td><strong>Personería jurídica</strong></td><td>Ninguna (a la fecha); PADIM A.C. en proceso de constitución</td></tr>
+    </table>
+
+    <blockquote>
+        <strong>Aclaración sobre la organización PADIM-MX en GitHub:</strong> Esta organización es operada por una persona física (contribuidor principal) que también es fundadora de proyectos comerciales independientes. La existencia de la organización en GitHub <strong>no constituye</strong> una relación societaria, laboral, de agencia, ni de representación alguna entre PADIM y esos proyectos comerciales. Véase la sección 8.
+    </blockquote>
+
+    <hr>
+
+    <!-- 3. DATOS -->
+    <h2>3. Datos que Recolectamos (y los que No)</h2>
+
+    <p><strong>3.1. Datos que PADIM NO recolecta:</strong></p>
+    <ul style="margin:0.5rem 0 1rem 1.5rem;color:var(--text-dim);">
+        <li>❌ Datos personales de visitantes del sitio web.</li>
+        <li>❌ Datos personales de usuarios del repositorio GitHub.</li>
+        <li>❌ Datos personales de propietarios de inmuebles.</li>
+        <li>❌ Datos personales de agentes inmobiliarios, compradores o personas físicas.</li>
+        <li>❌ Datos de pago (PADIM no vende productos ni servicios de pago).</li>
+    </ul>
+
+    <p><strong>3.2.</strong> El sitio puede usar <strong>cookies estrictamente necesarias</strong> para su funcionamiento. No usamos cookies de seguimiento publicitario. Si en el futuro se añadieran cookies opcionales, se mostrará un banner de consentimiento.</p>
+
+    <p><strong>3.3. No vendemos datos.</strong> PADIM no vende, no alquila, no comercia con datos personales.</p>
+
+    <hr>
+
+    <!-- 4. USO DE SCRAPERS -->
+    <h2>4. Uso de los Scrapers y Herramientas</h2>
+
+    <p><strong>4.1.</strong> Los scrapers son herramientas, no un servicio. PADIM distribuye <strong>código fuente</strong> de scrapers mediante canales descentralizados. El código se proporciona "TAL CUAL".</p>
+
+    <p><strong>4.2. Responsabilidad del usuario.</strong> Al usar las herramientas de PADIM, usted reconoce y acepta que:</p>
+    <ul style="margin:0.5rem 0 1rem 1.5rem;color:var(--text-dim);">
+        <li>Usted es el <strong>único responsable</strong> del cumplimiento legal en su jurisdicción.</li>
+        <li>Debe respetar los <strong>Términos de Servicio</strong> de cada sitio web o portal de origen.</li>
+        <li>Debe cumplir con la legislación aplicable (México, EE. UU., UE, o cualquier otra jurisdicción).</li>
+        <li>NO debe usar las herramientas para actividades ilegales.</li>
+    </ul>
+
+    <p><strong>4.3.</strong> Este aviso no constituye asesoría legal. Consulte a un abogado.</p>
+
+    <hr>
+
+    <!-- 5. PROPIEDAD INTELECTUAL -->
+    <h2>5. Propiedad Intelectual</h2>
+
+    <p><strong>5.1.</strong> El nombre "PADIM" y el logo asociado son marcas del proyecto. Hasta la constitución de PADIM A.C., la marca es detentada por la comunidad de contribuidores.</p>
+
+    <p><strong>5.2.</strong> La marca puede usarse en referencia nominativa ("compatible con PADIM", "implementa el estándar PADIM"). Queda prohibido el uso que sugiera afiliación, patrocinio o respaldo.</p>
+
+    <p><strong>5.3.</strong> El estándar (<code>spec/</code>) se publica bajo <strong>CC0 1.0 (Dominio Público)</strong>.</p>
+
+    <p><strong>5.4.</strong> El Trust Engine (<code>engine/</code>) se publica bajo <strong>AGPL v3</strong>.</p>
+
+    <p><strong>5.5.</strong> El CLI (<code>cli/</code>) se publica bajo <strong>MIT</strong>.</p>
+
+    <p><strong>5.6.</strong> Los scrapers se publican bajo <strong>BSL 1.1</strong> en el repositorio <a href="https://github.com/PADIM-MX/padim-scrapers">PADIM-MX/padim-scrapers</a>.</p>
+
+    <p><strong>5.7.</strong> Los datos se licencian bajo <strong>ODbL 1.0</strong>.</p>
+
+    <hr>
+
+    <!-- 6. LICENCIAS -->
+    <h2>6. Licencias Aplicables</h2>
+
+    <table>
+        <tr><th>Componente</th><th>Licencia</th><th>Archivo</th></tr>
+        <tr><td><strong>Estándar (spec/)</strong></td><td>CC0 1.0 (Dominio Público)</td><td><code>spec/LICENSE</code></td></tr>
+        <tr><td><strong>Trust Engine (engine/)</strong></td><td>AGPL v3</td><td><code>engine/LICENSE</code></td></tr>
+        <tr><td><strong>CLI (cli/)</strong></td><td>MIT</td><td><code>cli/LICENSE</code></td></tr>
+        <tr><td><strong>Scrapers</strong></td><td>BSL 1.1</td><td><code>PADIM-MX/padim-scrapers</code></td></tr>
+        <tr><td><strong>Datos</strong></td><td>ODbL 1.0</td><td><code>LICENSE-ODbL.md</code></td></tr>
+    </table>
+
+    <hr>
+
+    <!-- 7. DESCARGO -->
+    <h2>7. Descargo de Garantías (AS IS)</h2>
+
+    <p>El software, los datos, la documentación y demás materiales de PADIM se proporcionan <strong>"TAL CUAL"</strong>, sin garantía de ningún tipo, expresa o implícita, incluyendo sin limitación: comerciabilidad, idoneidad para un fin particular, no infracción, precisión o funcionamiento ininterrumpido.</p>
+
+    <p>En ningún caso los contribuidores de PADIM serán responsables por cualquier reclamo, daño o pérdida derivado del uso de los materiales.</p>
+
+    <hr>
+
+    <!-- 8. NO AFILIACIÓN -->
+    <h2>8. Cláusula de No Afiliación con Terceros</h2>
+
+    <blockquote>
+        Esta cláusula es <strong>crítica</strong> para la protección legal del proyecto y de sus contribuidores.
+    </blockquote>
+
+    <p><strong>8.1. No afiliación con back-bone.dev (BACKBONE).</strong> PADIM <strong>NO es</strong> propiedad ni está afiliado, patrocinado, respaldado, asociado, ni relacionado de manera alguna con <strong>back-bone.dev</strong> (operado por CAMARENA'S GROUP LLC).</p>
+
+    <p><strong>8.2.</strong> Tampoco existe afiliación con <strong>polaris.pw</strong>, <strong>visionnorth.mx</strong>, ni con cualquier otra empresa operada por contribuidores.</p>
+
+    <p><strong>8.3. No afiliación con portales.</strong> Los portales inmobiliarios cuyos datos pueden ser scrapeados (Inmuebles24, Vivanuncios, Lamudi, etc.) <strong>NO están afiliados ni respaldados por PADIM</strong>.</p>
+
+    <p><strong>8.4.</strong> Cualquier persona, empresa o entidad puede implementar el estándar PADIM, construir scrapers compatibles, o crear productos derivados sin pedir permiso, salvo por el uso de la marca con fines no nominativos.</p>
+
+    <hr>
+
+    <!-- 9. LIMITACIÓN -->
+    <h2>9. Limitación de Responsabilidad</h2>
+
+    <p>En la máxima extensión permitida por la ley, ningún contribuidor, mantenedor, patrocinador, ni persona o entidad relacionada con PADIM será responsable por: daños directos o indirectos, pérdida de ingresos o datos, interrupción del negocio, reclamos de terceros, o cualquier responsabilidad derivada del uso de PADIM.</p>
+
+    <p>Al usar PADIM, usted asume expresamente todos los riesgos derivados de dicho uso.</p>
+
+    <hr>
+
+    <!-- 10. JURISDICCIÓN -->
+    <h2>10. Jurisdicción y Ley Aplicable</h2>
+
+    <p>Este aviso legal y cualquier disputa relacionada con PADIM se rigen por las <strong>leyes federales de México</strong>. Para cualquier disputa, las partes se someten a los tribunales competentes de la <strong>Ciudad de México</strong>.</p>
+
+    <hr>
+
+    <!-- 11. CONTACTO -->
+    <h2>11. Contacto y Reportes</h2>
+
+    <table>
+        <tr><th>Concepto</th><th>Detalle</th></tr>
+        <tr><td><strong>Contacto general</strong></td><td><a href="mailto:riuag7@protonmail.com">riuag7@protonmail.com</a></td></tr>
+        <tr><td><strong>Reportes de seguridad</strong></td><td><a href="mailto:riuag7@protonmail.com">riuag7@protonmail.com</a> (Asunto: "Security Report")</td></tr>
+        <tr><td><strong>Notificaciones legales</strong></td><td><a href="mailto:riuag7@protonmail.com">riuag7@protonmail.com</a> (Asunto: "Legal Notice")</td></tr>
+    </table>
+
+    <hr>
+
+    <!-- 12-18 RESUMEN -->
+    <h2>12. Modificaciones</h2>
+    <p>PADIM podrá modificar este aviso legal. Las modificaciones sustanciales se anunciarán en el repositorio GitHub mediante un issue con etiqueta <code>legal</code>.</p>
+
+    <h2>13. Constitución de PADIM A.C.</h2>
+    <p>La comunidad está trabajando en la constitución de una <strong>Asociación Civil Mexicana sin fines de lucro</strong> (Q4 2026). Una vez constituida, este aviso se actualizará.</p>
+
+    <h2>14. Aceptación</h2>
+    <p>Al visitar el sitio web, descargar el código, utilizar cualquier herramienta o contribuir al proyecto, usted reconoce haber leído y aceptado los términos de este aviso legal. Si no está de acuerdo, no utilice el proyecto.</p>
+
+    <h2>15. Vigencia</h2>
+    <p><strong>Última actualización:</strong> 03 de julio de 2026 · <strong>Versión:</strong> 1.0.0</p>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>
+            <a href="/">← Inicio</a>
+            <a href="/aviso-legal">Aviso Legal</a>
+            <a href="/terminos">Términos</a>
+            <a href="https://github.com/PADIM-MX/padim">GitHub</a>
+        </p>
+        <p>© 2026 PADIM Contributors · Estándar CC0 · Código AGPL/MIT · Datos ODbL</p>
+        <p style="margin-top:0.5rem;font-size:0.75rem;">"El protocolo es de todos. El protocolo no es de nadie."</p>
+    </div>
+
+</div>
+
+</body>
+</html>

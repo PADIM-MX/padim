@@ -642,6 +642,42 @@
             h2 { font-size: 1.25rem; }
             .motto-flag svg { width: 16px; height: 11px; }
         }
+        /* ── Quasar Map (added by OmegaBridge) ── */
+        .map-container {
+            width: 100%;
+            height: 480px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            margin: 2rem 0;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        @media (max-width: 640px) {
+            .map-container { height: 320px; }
+        }
+        /* ── Quasar Map ── */
+        .map-container {
+            width: 100%;
+            height: 450px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #000;
+            margin: 2rem 0;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        @media (max-width: 640px) {
+            .map-container { height: 280px; }
+        }
     </style>
 </head>
 <body>
@@ -673,19 +709,15 @@
         </p>
 
         <div class="search-wrap">
-            <span class="icon">🔍</span>
-            <input type="text" placeholder="Colonia, ciudad o estado… ej: Del Valle, Condesa, CDMX" id="search-input">
-            <select>
-                <option>Todas las fuentes</option>
-                <option>Vivanuncios</option>
-                <option>Inmuebles24</option>
-                <option>MLS</option>
-                <option>Propiedades.com</option>
-                <option>EasyBroker</option>
-                <option>Lamudi</option>
-            </select>
-            <button onclick="alert('🔍 Buscaría: ' + document.getElementById('search-input').value + '\n\n(La búsqueda en vivo se activa cuando conectamos la API de BACKBONE)')">Buscar →</button>
-        </div>
+                    <span class="icon">🔍</span>
+                    <input type="text" placeholder="Colonia, ciudad o estado… ej: Del Valle, Condesa, CDMX" id="search-input">
+                    <select>
+                        <option>Todas</option>
+                        <option>Venta</option>
+                        <option>Renta</option>
+                    </select>
+                    <button onclick="alert('🔍 Buscaría: ' + document.getElementById('search-input').value + '\n\n(La búsqueda en vivo se conecta a la API de BACKBONE)' )">Buscar →</button>
+                </div>
         <div class="hero-hints">
             Prueba: <kbd>Del Valle</kbd> <kbd>Condesa</kbd> <kbd>Polanco</kbd> <kbd>CDMX</kbd>
         </div>
@@ -715,47 +747,32 @@
         </div>
     </div>
 
-    <!-- SOURCE GRID -->
+    <!-- SOURCE GRID — categorías genéricas -->
     <div class="sources">
-        <h2>Fuentes activas</h2>
+        <h2>Cobertura de datos</h2>
         <div class="source-grid">
             <div class="source-card">
-                <div class="name">Vivanuncios</div>
-                <div class="code">vivanuncios</div>
-                <div class="count">13,050</div>
+                <div class="name">Portales inmobiliarios</div>
+                <div class="code">scraping directo</div>
+                <div class="count">38,830</div>
                 <div class="trust-bar"><div class="fill" style="width:60%"></div></div>
             </div>
             <div class="source-card">
-                <div class="name">MLS</div>
-                <div class="code">mls</div>
+                <div class="name">MLS y API Partners</div>
+                <div class="code">integración directa</div>
                 <div class="count">12,633</div>
-                <div class="trust-bar"><div class="fill" style="width:40%"></div></div>
+                <div class="trust-bar"><div class="fill" style="width:45%"></div></div>
             </div>
             <div class="source-card">
-                <div class="name">Propiedades.com</div>
-                <div class="code">propiedades_com</div>
-                <div class="count">12,434</div>
-                <div class="trust-bar"><div class="fill" style="width:50%"></div></div>
-            </div>
-            <div class="source-card">
-                <div class="name">Inmuebles24</div>
-                <div class="code">inmuebles24</div>
-                <div class="count">12,346</div>
-                <div class="trust-bar"><div class="fill" style="width:55%"></div></div>
-            </div>
-            <div class="source-card">
-                <div class="name">EasyBroker</div>
-                <div class="code">easybroker</div>
-                <div class="count">1,256</div>
-                <div class="trust-bar"><div class="fill" style="width:35%"></div></div>
-            </div>
-            <div class="source-card">
-                <div class="name">Lamudi</div>
-                <div class="code">lamudi</div>
-                <div class="count">2</div>
-                <div class="trust-bar"><div class="fill" style="width:70%"></div></div>
+                <div class="name">Contribuciones comunidad</div>
+                <div class="code">datos abiertos</div>
+                <div class="count">670</div>
+                <div class="trust-bar"><div class="fill" style="width:75%"></div></div>
             </div>
         </div>
+        <p style="font-size:0.75rem;color:var(--text-dim);margin-top:0.75rem;text-align:center;font-family:var(--mono)">
+            Las fuentes específicas se documentan en el repositorio oficial.
+        </p>
     </div>
 
     <!-- API: Stripe-style developer docs -->
@@ -980,13 +997,43 @@ padim serve --port 8080</pre>
         </div>
     </section>
 
+    <!-- QUASAR: Mapa de propiedades en vivo -->
+    <section>
+        <div class="section-label">Quasar · Mapa en Vivo</div>
+        <h2>50,000+ propiedades geolocalizadas</h2>
+        <p class="section-desc">
+            Cada punto en el mapa es una propiedad real extraída de portales y fuentes abiertas.
+            Los clusters muestran densidad por colonia. Filtra por tipo y operación.
+        </p>
+        <div class="map-container">
+            <iframe 
+                src="https://quasar.enmexico.casa" 
+                title="Quasar - Mapa de Datos Inmobiliarios MX"
+                loading="lazy"
+                allow="geolocation"
+                sandbox="allow-scripts allow-same-origin allow-popups">
+            </iframe>
+        </div>
+        <div class="btn-group">
+            <a href="https://quasar.backbone.dev" class="btn btn-primary" target="_blank">⟁ Abrir Quasar</a>
+            <a href="https://back-bone.dev" class="btn btn-ghost">Enterprise API →</a>
+        </div>
+    </section>
+
     <footer>
         <p class="tagline">PADIM — Protocolo Abierto de Datos Inmobiliarios de México</p>
+        <div class="legal-links" style="margin-bottom:0.75rem;font-size:0.8rem;">
+            <a href="/aviso-legal" style="color:var(--text-dim);text-decoration:none;margin:0 0.5rem;">Aviso Legal</a>
+            <span style="color:var(--border);">·</span>
+            <a href="/terminos" style="color:var(--text-dim);text-decoration:none;margin:0 0.5rem;">Términos</a>
+            <span style="color:var(--border);">·</span>
+            <a href="/repo" style="color:var(--text-dim);text-decoration:none;margin:0 0.5rem;">GitHub</a>
+        </div>
         <div class="licenses">
             <a href="https://creativecommons.org/publicdomain/zero/1.0/">Estándar: CC0 1.0</a>
             <a href="https://opensource.org/licenses/MIT">Herramientas: MIT</a>
             <a href="https://opendatacommons.org/licenses/odbl/">Datos: ODbL</a>
-            <a href="https://back-bone.dev">BACKBONE Enterprise →</a>
+            <a href="https://back-bone.dev">Enterprise API →</a>
         </div>
         <p class="motto">
             <span class="motto-flag">

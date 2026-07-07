@@ -1,0 +1,24 @@
+# CC0 1.0 Universal — Dedicación al Dominio Público
+
+## Declaración de Propósito
+
+El directorio `spec/` contiene la especificación técnica del Protocolo Abierto de 
+Datos Inmobiliarios de México (PADIM): esquemas JSON, tipos de datos, relaciones 
+y definiciones del estándar.
+
+Para maximizar la adopción del estándar, esta especificación se dedica al 
+**dominio público** bajo CC0 1.0 Universal. Cualquier persona, empresa o 
+gobierno puede implementar, modificar y distribuir esta especificación sin 
+restricciones de ningún tipo, incluyendo fines comerciales.
+
+## CC0 1.0 Universal
+
+Para ver el texto completo de CC0 1.0 Universal, visita:
+https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+O copia el archivo `LICENSE-CC0` de la raíz del proyecto.
+
+---
+
+*Este directorio NO está bajo la licencia MIT de la raíz del proyecto.*
+*La licencia aplicable es CC0 1.0 Universal.*
