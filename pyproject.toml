@@ -23,8 +23,6 @@ dependencies = [
 [project.urls]
 Home = "https://PADIM.enmexico.casa"
 Source = "https://github.com/PADIM-MX/padim"
-Scrapers = "https://github.com/PADIM-MX/padim-scrapers"
-BACKBONE_url = "https://back-bone.dev"
 
 [project.scripts]
 padim = "padim.cli.main:main"

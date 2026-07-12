@@ -65,71 +65,18 @@ PADIM es el **lenguaje común** que rompe ese cerco.
 
 ## 📦 Scrapers Funcionales — Estrategia de 3 Capas
 
-Los conectores funcionales para scraping NO están en este repositorio principal. Se distribuyen a través de **4 canales independientes** sincronizados automáticamente por CI/CD. Todos son respaldos del mismo código, para que el proyecto sea **indestructible por diseño**.
-
-### Capa 1: GitHub (Primario) — CÓDIGO + COLABORACIÓN
-**Interfaz humana principal.** Pull requests, issues, discusiones, y el código fuente vivo.
+Los conectores funcionales para scraping se distribuyen desde un repositorio público independiente:
 
 ```bash
-git clone https://github.com/PADIM-MX/padim-scrapers
-cd padim-scrapers
-python3 vivanuncios_curl.py --colony "Del Valle" --output datos.json
+git clone https://github.com/Trogloautoegocrata/mx-property-scrapers
+cd mx-property-scrapers
 ```
 
-**Ventajas:** Todo developer mexicano sabe usar GitHub. PRs, reviews, CI. ✅ RECOMENDADO para contribuir.
-
-### Capa 2: Radicle (Red P2P) — RESPALDO DESCENTRALIZADO
-**Espejo automático del repositorio.** Cada push a GitHub se refleja en Radicle mediante CI. No requiere intervención humana.
-
-```bash
-rad clone rad:z3AqdGcF6fCoGVs64J22zEe85k24A
-cd padim-scrapers
-```
-
-**Ventajas:** Historial Git completo, actualizable, colaborativo. Mientras haya 2 personas con el repo, existe. **Se sincroniza SOLO** via GitHub Actions. ✅ RESPALDO AUTOMÁTICO.
-
-### Capa 3: IPFS (Contenido) — DISTRIBUCIÓN INMUTABLE
-**Cada release se publica automáticamente a IPFS.** El CID (Content ID) es la prueba criptográfica de que el contenido no ha sido alterado.
-
-```
-# El CI genera automáticamente:
-# 1. ZIP del release
-# 2. CID de IPFS
-# 3. Pin en 3+ nodos gratuitos (Pinata, Filebase)
-```
-
-**Ventajas:** Contenido inmutable, IPFS es la red más resistente del mundo. ✅ AUTOMATIZADO.
-
-### Capa 4: Magnet Link (BitTorrent DHT) — GENERADO AUTOMÁTICAMENTE
-**Cada release genera su propio magnet link.** El CI calcula el SHA256, crea el torrent, y lo sube a GitHub Releases.
-
-```
-magnet:?xt=urn:sha256:[AUTOMATIC]&dn=padim-scrapers-v2.0.0.zip
-```
-
-**Ventajas:** No necesita instalación de herramientas raras. **Se regenera solo en cada release.** Ya no es estático. ✅ AUTOMATIZADO.
-
-### ¿Por qué 4 capas y cómo se sincronizan?
-
-```
-[Dev hace PR en GitHub] → [CI tests] → [Merge a main]
-    ↓                        ↓               ↓
-  Radicle mirror          IPFS pin        ZIP + Magnet
-  (automático)            (automático)    (GitHub Release)
-```
-
-Para eliminar PADIM-scrapers tendrían que:
-1. ❌ Tumbar GitHub → **Posible**, pero Capas 2, 3, 4 siguen funcionando
-2. ❌ Tumbar Radicle → **No pueden**, red P2P
-3. ❌ Censurar IPFS → **No pueden**, los CIDs están everywhere
-4. ❌ Eliminar todos los seeders de BitTorrent → **No pueden**
-5. ❌ Censurar todas las menciones → **No pueden**
-
-**El proyecto es indestructible por diseño. Los datos no deberían estar atrapados.**
+**Licencia:** BSL 1.1 — uso no comercial libre.
 
 ---
 
-## 🧱 Estructura del Repositorio
+## 📜 Licencia
 
 ```
 padim/
@@ -178,7 +125,7 @@ El 60% de las propiedades en portales mexicanos YA NO ESTÁN DISPONIBLES. PADIM 
 | Quiero... | Hago... | Tiempo |
 |-----------|---------|:------:|
 | Usar los datos | `pip install padim` | 2 min |
-| Obtener scrapers | Clonar Radicle o usar magnet link | 2 min |
+| Obtener scrapers | `git clone https://github.com/Trogloautoegocrata/mx-property-scrapers` | 2 min |
 | Contribuir datos de mi colonia | `padim scrape` desde mi PC | 5 min |
 | Construir un conector para mi ciudad | Sigo especificaciones en `connectors/` | 2-3h |
 | Mejorar el Trust Engine | Abro un PR en `engine/` | 1h+ |
@@ -187,21 +134,7 @@ El 60% de las propiedades en portales mexicanos YA NO ESTÁN DISPONIBLES. PADIM 
 
 ---
 
-## 🔗 BACKBONE — Cuando necesitas más que herramientas libres
-
-PADIM te da el poder de los datos. Cuando necesites **escalar**, **BACKBONE** es la capa enterprise:
-
-| PADIM (gratis) | BACKBONE (desde $2,999/mes) |
-|----------------|-----------------------------|
-| Datos de tu máquina | API 24/7 con SLA 99.9% |
-| Trust Engine básico | Trust Scoring completo con ML |
-| Sin soporte | Soporte enterprise, onboarding dedicado |
-| Sin garantía | AVM certificado con precisión documentada |
-| Tú mantienes todo | Webhooks, plugins CRM, integraciones |
-
-**PADIM te da el poder. BACKBONE te da la tranquilidad.**
-
-→ [back-bone.dev](https://back-bone.dev)
+## 📖 PADIM es un proyecto independiente
 
 ---
 
@@ -221,9 +154,7 @@ PADIM te da el poder de los datos. Cuando necesites **escalar**, **BACKBONE** es
 
 - **Landing**: [padim.enmexico.casa](https://padim.enmexico.casa)
 - **Código**: [github.com/PADIM-MX/padim](https://github.com/PADIM-MX/padim)
-- **Scrapers (Radicle)**: `rad clone rad:z3AqdGcF6fCoGVs64J22zEe85k24A`
-- **Scrapers (Magnet)**: `magnet:?xt=urn:sha256:e765112b45b704ee20e6f7afb17458652fe3c455e3cd14b0d50d83171bb018cd&dn=padim-scrapers-v1.0.0.zip&xl=30358`
-- **BACKBONE**: [back-bone.dev](https://back-bone.dev)
+- **Scrapers**: [mx-property-scrapers](https://github.com/Trogloautoegocrata/mx-property-scrapers)
 
 ---
 
