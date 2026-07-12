@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PADIM — Protocolo Abierto de Datos Inmobiliarios de México</title>
+    <style>
+        :root {
+            --bg: #060608;
+            --bg-card: #0b0b0e;
+            --surface: #101014;
+            --border: #1c1c22;
+            --text: #c8c8cc;
+            --text-dim: #6b6b76;
+            --text-bright: #f0f0f4;
+            --accent: #f0c040;
+            --accent-dim: #a08020;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --blue: #3b82f6;
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --pad-sec: 6rem 0;
+            --pad-card: 2rem;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrap { max-width: 1040px; margin:0 auto; padding:0 4rem; }
+
+        /* ── TOP BAR ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            font-family: var(--mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            letter-spacing: 0.06em;
+            text-decoration: none;
+            user-select: none;
+        }
+        .logo span { color: var(--accent); }
+        .topbar nav { display:flex; gap:2rem; font-size:0.85rem; }
+        .topbar nav a { color:var(--text-dim); text-decoration:none; transition:color .2s; letter-spacing:0.02em; }
+        .topbar nav a:hover { color:var(--text-bright); }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 7rem 0 5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .hero .tag {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--accent-dim);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: 3.6rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-bright);
+            line-height: 1.12;
+        }
+        .hero h1 em { font-style: normal; color: var(--accent); }
+        .hero p {
+            max-width: 640px;
+            margin: 1.5rem auto 3rem;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* Search bar */
+        .search-wrap {
+            max-width: 720px;
+            margin: 0 auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 0.6rem 0.6rem 0.6rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: border-color .3s, box-shadow .3s;
+        }
+        .search-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(240,192,64,0.08);
+        }
+        .search-wrap .icon { color:var(--text-dim); font-size:1.15rem; flex-shrink:0; opacity:0.6; }
+        .search-wrap input {
+            flex:1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-bright);
+            font-size: 1rem;
+            font-family: var(--mono);
+            padding: 0.7rem 0;
+        }
+        .search-wrap input::placeholder { color: var(--text-dim); opacity:0.5; }
+        .search-wrap select {
+            background: var(--bg);
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.55rem 0.85rem;
+            font-size: 0.8rem;
+            font-family: var(--mono);
+            cursor: pointer;
+            appearance: none;
+        }
+        .search-wrap button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            padding: 0.7rem 1.75rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: opacity .2s, transform .15s;
+            white-space: nowrap;
+        }
+        .search-wrap button:hover { opacity: 0.88; transform: translateY(-1px); }
+        .search-wrap button:active { transform: translateY(0); }
+        .hero-hints {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .hero-hints kbd {
+            font-family: var(--mono);
+            background: var(--surface);
+            padding: 0.2rem 0.55rem;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            color: var(--text);
+            border: 1px solid var(--border);
+            cursor: default;
+            transition: border-color .2s;
+        }
+        .hero-hints kbd:hover { border-color: var(--accent-dim); }
+
+        /* ── METRICS ── */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            margin: -3rem auto 4rem;
+            max-width: 880px;
+        }
+        .metric {
+            background: var(--bg-card);
+            padding: 2.25rem 1.5rem;
+            text-align: center;
+        }
+        .metric .num {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            font-family: var(--mono);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+        .metric .label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-top: 0.35rem;
+        }
+        .metric .sub {
+            font-size: 0.7rem;
+            color: var(--accent-dim);
+            margin-top: 0.2rem;
+            font-family: var(--mono);
+        }
+
+        /* ── SOURCE GRID ── */
+        .sources { margin: 4rem 0; }
+        .sources h2 {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .source-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: border-color .2s, background .2s;
+        }
+        .source-card:hover {
+            border-color: var(--accent-dim);
+            background: var(--bg-card);
+        }
+        .source-card .name {
+            font-weight: 600;
+            color: var(--text-bright);
+            font-size: 0.9rem;
+        }
+        .source-card .code {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin: 0.2rem 0 0.5rem;
+        }
+        .source-card .count {
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .source-card .trust-bar {
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        .source-card .trust-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--green);
+            transition: width 1s ease;
+        }
+
+        /* ── SECTIONS ── */
+        section { padding: var(--pad-sec); border-bottom: 1px solid var(--border); }
+        section:last-of-type { border-bottom: none; }
+        .section-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--accent-dim);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        .section-desc {
+            color: var(--text-dim);
+            font-size: 1rem;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* ── API BLOCK ── */
+        .api-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            transition: border-color .2s;
+        }
+        .api-block:hover { border-color: rgba(240,192,64,0.15); }
+        .api-block .url {
+            background: var(--bg-card);
+            padding: 1rem 1.5rem;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .api-block .url .method {
+            display: inline-block;
+            background: var(--green);
+            color: #000;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .api-block pre {
+            padding: 1.5rem;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-x: auto;
+            margin: 0;
+        }
+        .api-block pre .key { color: var(--blue); }
+        .api-block pre .string { color: var(--green); }
+        .api-block pre .number { color: var(--yellow); }
+        .api-block pre .null { color: var(--text-dim); }
+        .api-block pre .comment { color: var(--text-dim); font-style: italic; opacity:0.7; }
+
+        /* ── PROPERTIES TABLE ── */
+        .props-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .props-table th {
+            text-align: left;
+            padding: 0.85rem 1rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+        .props-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+        .props-table tr:last-child td { border-bottom: none; }
+        .props-table tr:hover td { background: rgba(255,255,255,0.01); }
+        .props-table .prop-title {
+            color: var(--text-bright);
+            font-weight: 500;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .trust-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.45rem;
+            vertical-align: middle;
+        }
+        .trust-high { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.3); }
+        .trust-mid { background: var(--yellow); }
+        .trust-low { background: var(--red); }
+
+        .table-legend {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 1rem;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        /* ── TRUST ENGINE ── */
+        .trust-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+        .trust-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: border-color .2s;
+        }
+        .trust-item:hover { border-color: var(--accent-dim); }
+        .trust-item .ts {
+            font-family: var(--mono);
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .trust-item .ts-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-top: 0.2rem;
+        }
+        .trust-item .ts-desc {
+            font-size: 0.8rem;
+            color: var(--text);
+            margin-top: 0.75rem;
+            line-height: 1.6;
+        }
+        .trust-item .ts-meta {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--accent-dim);
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all .2s;
+            font-size: 0.85rem;
+            font-family: var(--font);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-ghost:hover { border-color: var(--text-dim); background: rgba(255,255,255,0.02); }
+        .btn-group { display:flex; gap:1rem; flex-wrap:wrap; margin-top:2rem; }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 4rem 0 5rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        footer .tagline {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            font-family: var(--mono);
+        }
+        footer .licenses { display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; }
+        footer .licenses a { color:var(--text-dim); text-decoration:none; transition:color .2s; font-size:0.8rem; }
+        footer .licenses a:hover { color:var(--text); }
+        footer .motto {
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            opacity:0.6;
+        }
+
+        a { color: var(--blue); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .price-cell { font-family: var(--mono); color:var(--text-bright); }
+
+        /* ── PHILOSOPHY BLOCK ── */
+        .phil-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+        .phil-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+        }
+        .phil-card .phil-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.4rem;
+        }
+        .phil-card .phil-value {
+            font-family: var(--mono);
+            font-size: 1rem;
+            color: var(--text-bright);
+            margin-bottom: 0.3rem;
+        }
+        .phil-card .phil-sub {
+            font-size: 0.75rem;
+            color: var(--green);
+        }
+        .phil-card .phil-sub-yellow {
+            font-size: 0.75rem;
+            color: var(--yellow);
+        }
+        .magnet-link {
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .wrap { padding: 0 1.5rem; }
+            .topbar { padding: 1.25rem 0; }
+            .topbar nav { gap: 1rem; font-size: 0.78rem; }
+            .logo { font-size: 1.15rem; }
+            .hero { padding: 4rem 0 3rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 0.95rem; }
+            .search-wrap { flex-wrap: wrap; padding: 0.75rem; gap: 0.5rem; }
+            .search-wrap input { width: 100%; }
+            .search-wrap select { flex:1; min-width:0; }
+            .search-wrap button { width: 100%; }
+            .metrics { grid-template-columns: 1fr 1fr; margin-top: -1.5rem; }
+            .metric { padding: 1.5rem 1rem; }
+            .metric .num { font-size: 1.8rem; }
+            .trust-demo { grid-template-columns: 1fr; }
+            .phil-grid { grid-template-columns: 1fr; }
+            .source-grid { grid-template-columns: 1fr 1fr; }
+            .props-table { font-size: 0.72rem; }
+            .props-table th,
+            .props-table td { padding: 0.6rem 0.6rem; }
+            .props-table .prop-title { max-width: 120px; }
+            section { --pad-sec: 4rem 0; }
+            h2 { font-size: 1.5rem; }
+            .hero-hints kbd { font-size: 0.7rem; padding: 0.15rem 0.4rem; }
+        }
+
+        @media (max-width: 480px) {
+            .wrap { padding: 0 1rem; }
+            .topbar nav { gap: 0.6rem; font-size: 0.7rem; }
+            .hero h1 { font-size: 1.7rem; }
+            .metrics { grid-template-columns: 1fr 1fr; }
+            .source-grid { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+            .table-legend { flex-direction: column; gap: 0.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <a href="#" class="logo"><span>PADIM</span></a>
+        <nav>
+            <a href="#api">API</a>
+            <a href="#datos">Datos</a>
+            <a href="#trust">Trust</a>
+            <a href="#cli">CLI</a>
+            <a href="https://github.com/PADIM-MX/padim" target="_blank">GitHub</a>
+        </nav>
+    </header>
+
+    <!-- HERO: Search bar como centro visual -->
+    <section class="hero">
+        <div class="tag">Protocolo Abierto de Datos Inmobiliarios de México</div>
+        <h1>
+            <em>51,721</em> propiedades.<br>
+            <em>6</em> fuentes. <em>1</em> API.
+        </h1>
+        <p>
+            Datos inmobiliarios de México, gratuitos, abiertos y verificados por un Trust Engine comunitario.
+            Sin registro. Sin API key. Sin límite.
+        </p>
+
+        <div class="search-wrap">
+            <span class="icon">🔍</span>
+            <input type="text" placeholder="Colonia, ciudad o estado… ej: Del Valle, Condesa, CDMX" id="search-input">
+            <select>
+                <option>Todas las fuentes</option>
+                <option>Vivanuncios</option>
+                <option>Inmuebles24</option>
+                <option>MLS</option>
+                <option>Propiedades.com</option>
+                <option>EasyBroker</option>
+                <option>Lamudi</option>
+            </select>
+            <button onclick="alert('🔍 Buscaría: ' + document.getElementById('search-input').value + '\n\n(La búsqueda en vivo se activa cuando conectamos la API de BACKBONE)')">Buscar →</button>
+        </div>
+        <div class="hero-hints">
+            Prueba: <kbd>Del Valle</kbd> <kbd>Condesa</kbd> <kbd>Polanco</kbd> <kbd>CDMX</kbd>
+        </div>
+    </section>
+
+    <!-- METRICS: Prueba social instantánea -->
+    <div class="metrics">
+        <div class="metric">
+            <div class="num" id="total-props">51,721</div>
+            <div class="label">Propiedades</div>
+            <div class="sub">activas verificadas</div>
+        </div>
+        <div class="metric">
+            <div class="num">6</div>
+            <div class="label">Fuentes</div>
+            <div class="sub">portales + MLS</div>
+        </div>
+        <div class="metric">
+            <div class="num">28</div>
+            <div class="label">Estados</div>
+            <div class="sub">cobertura nacional</div>
+        </div>
+        <div class="metric">
+            <div class="num">0.72</div>
+            <div class="label">Trust Score ⌀</div>
+            <div class="sub">confianza promedio</div>
+        </div>
+    </div>
+
+    <!-- SOURCE GRID -->
+    <div class="sources">
+        <h2>Fuentes activas</h2>
+        <div class="source-grid">
+            <div class="source-card">
+                <div class="name">Vivanuncios</div>
+                <div class="code">vivanuncios</div>
+                <div class="count">13,050</div>
+                <div class="trust-bar"><div class="fill" style="width:60%"></div></div>
+            </div>
+            <div class="source-card">
+                <div class="name">MLS</div>
+                <div class="code">mls</div>
+                <div class="count">12,633</div>
+                <div class="trust-bar"><div class="fill" style="width:40%"></div></div>
+            </div>
+            <div class="source-card">
+                <div class="name">Propiedades.com</div>
+                <div class="code">propiedades_com</div>
+                <div class="count">12,434</div>
+                <div class="trust-bar"><div class="fill" style="width:50%"></div></div>
+            </div>
+            <div class="source-card">
+                <div class="name">Inmuebles24</div>
+                <div class="code">inmuebles24</div>
+                <div class="count">12,346</div>
+                <div class="trust-bar"><div class="fill" style="width:55%"></div></div>
+            </div>
+            <div class="source-card">
+                <div class="name">EasyBroker</div>
+                <div class="code">easybroker</div>
+                <div class="count">1,256</div>
+                <div class="trust-bar"><div class="fill" style="width:35%"></div></div>
+            </div>
+            <div class="source-card">
+                <div class="name">Lamudi</div>
+                <div class="code">lamudi</div>
+                <div class="count">2</div>
+                <div class="trust-bar"><div class="fill" style="width:70%"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API: Stripe-style developer docs -->
+    <section id="api">
+        <div class="section-label">API REST</div>
+        <h2>Sin registro. Sin key. Sin límite.</h2>
+        <p class="section-desc">
+            51,721 propiedades con trust score. Abierto a cualquier aplicación.
+            Sin autenticación. Sin rate limiting. Sin sorpresas.
+        </p>
+
+        <div class="api-block">
+            <div class="url"><span class="method">GET</span> /v1/properties?colony=Del+Valle&limit=3</div>
+            <pre>{
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"title"</span>:       <span class="string">"Casa en Venta en Del Valle"</span>,
+      <span class="key">"price"</span>:       <span class="number">4500000</span>,
+      <span class="key">"currency"</span>:    <span class="string">"MXN"</span>,
+      <span class="key">"colony"</span>:      <span class="string">"Del Valle"</span>,
+      <span class="key">"state"</span>:       <span class="string">"CDMX"</span>,
+      <span class="key">"bedrooms"</span>:    <span class="number">3</span>,
+      <span class="key">"m²_const"</span>:    <span class="number">120</span>,
+      <span class="comment">// trust score por PADIM Trust Engine</span>
+      <span class="key">"trust_score"</span>: <span class="number">0.92</span>
+    }
+  ]
+}</pre>
+        </div>
+
+        <div class="api-block">
+            <div class="url"><span class="method">GET</span> /v1/market/stats?state=CDMX</div>
+            <pre>{
+  <span class="key">"colony"</span>:        <span class="string">"Tlalpan Centro"</span>,
+  <span class="key">"total_active"</span>:  <span class="number">284</span>,
+  <span class="key">"avg_price"</span>:     <span class="number">5181711</span>,
+  <span class="key">"avg_price_m²"</span>:  <span class="number">17778</span>,
+  <span class="key">"property_type"</span>: <span class="string">"casa"</span>,
+  <span class="key">"business_type"</span>: <span class="string">"venta"</span>
+}</pre>
+        </div>
+
+        <div class="btn-group">
+            <a href="https://api.back-bone.dev/v1/properties?limit=5" class="btn btn-primary" target="_blank">Probar API →</a>
+            <a href="https://github.com/PADIM-MX/padim" class="btn btn-ghost">Documentación completa</a>
+        </div>
+    </section>
+
+    <!-- DATA TABLE: Trust Engine en acción -->
+    <section id="datos">
+        <div class="section-label">Datos verificados</div>
+        <h2>Propiedades con trust score alto</h2>
+        <p class="section-desc">
+            Cada propiedad pasa por el Trust Engine antes de listarse.
+            El score indica qué tan confiable es el dato.
+        </p>
+
+        <table class="props-table">
+            <thead>
+                <tr>
+                    <th>Trust</th>
+                    <th>Propiedad</th>
+                    <th>Precio</th>
+                    <th>Colonia</th>
+                    <th>Fuente</th>
+                    <th>Rec</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="trust-dot trust-high"></span>0.92</td>
+                    <td class="prop-title">Departamento en Venta en Del Valle</td>
+                    <td class="price-cell">$4,500,000</td>
+                    <td>Del Valle</td>
+                    <td>Vivanuncios</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td><span class="trust-dot trust-high"></span>0.88</td>
+                    <td class="prop-title">Casa en Condesa con Terraza</td>
+                    <td class="price-cell">$8,200,000</td>
+                    <td>Condesa</td>
+                    <td>Inmuebles24</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td><span class="trust-dot trust-high"></span>0.85</td>
+                    <td class="prop-title">Penthouse en Polanco</td>
+                    <td class="price-cell">$15,000,000</td>
+                    <td>Polanco</td>
+                    <td>MLS</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td><span class="trust-dot trust-mid"></span>0.65</td>
+                    <td class="prop-title">Departamento Roma Norte</td>
+                    <td class="price-cell">$3,800,000</td>
+                    <td>Roma</td>
+                    <td>Propiedades.com</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td><span class="trust-dot trust-mid"></span>0.52</td>
+                    <td class="prop-title">Casa en Santa Fe</td>
+                    <td class="price-cell">$6,500,000</td>
+                    <td>Santa Fe</td>
+                    <td>EasyBroker</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td><span class="trust-dot trust-low"></span>0.18</td>
+                    <td class="prop-title">Terreno Lomas de Chapultepec</td>
+                    <td class="price-cell">$2,100,000</td>
+                    <td>Lomas</td>
+                    <td>Vivanuncios</td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="table-legend">
+            <span><span class="trust-dot trust-high"></span> Trust alto (0.7–1.0)</span>
+            <span><span class="trust-dot trust-mid"></span> Trust medio (0.3–0.7)</span>
+            <span><span class="trust-dot trust-low"></span> Trust bajo (&lt;0.3)</span>
+        </div>
+    </section>
+
+    <!-- TRUST ENGINE: Diferenciador clave, símil TPB seeders -->
+    <section id="trust">
+        <div class="section-label">Trust Engine</div>
+        <h2>Seeders para datos inmobiliarios</h2>
+        <p class="section-desc">
+            Como Pirate Bay muestra seeders y leechers para medir la confianza de un torrent,
+            PADIM asigna un Trust Score a cada propiedad basado en señales de calidad,
+            antigüedad y consistencia entre fuentes.
+        </p>
+
+        <div class="trust-demo">
+            <div class="trust-item">
+                <div class="ts" style="color:var(--green)">0.92</div>
+                <div class="ts-label">Excelente</div>
+                <div class="ts-desc">Propiedad publicada hace menos de 7 días, confirmada por 3 fuentes independientes. Precio consistente con el promedio de la zona.</div>
+                <div class="ts-meta">Seeders: 12 · Leechers: 2</div>
+            </div>
+            <div class="trust-item">
+                <div class="ts" style="color:var(--yellow)">0.52</div>
+                <div class="ts-label">Dudosa</div>
+                <div class="ts-desc">180 días sin actualizar. Una sola fuente. El precio está 20% por debajo del promedio. Posible ghost listing o dato obsoleto.</div>
+                <div class="ts-meta">Seeders: 1 · Leechers: 0</div>
+            </div>
+            <div class="trust-item">
+                <div class="ts" style="color:var(--red)">0.12</div>
+                <div class="ts-label">Rechazada</div>
+                <div class="ts-desc">Patrón de fraude detectado: precio 80% por debajo del promedio de zona, texto con urgencia de cierre. No recomendada.</div>
+                <div class="ts-meta">Seeders: 0 · Leechers: 0</div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <a href="https://github.com/PADIM-MX/padim/blob/main/engine/trust_engine.py" class="btn btn-ghost">Ver Trust Engine en GitHub →</a>
+        </div>
+    </section>
+
+    <!-- CLI -->
+    <section id="cli">
+        <div class="section-label">CLI</div>
+        <h2>pip install padim</h2>
+        <p class="section-desc">
+            Scrapea, valida y contribuye datos desde tu terminal.
+            Sin servidores centrales. Sin registros. Sin permiso.
+        </p>
+
+        <div class="api-block">
+            <div class="url" style="border-bottom:none;">bash</div>
+            <pre><span class="comment"># Instalar</span>
+pip install padim
+
+<span class="comment"># Scrapear una colonia</span>
+padim scrape vivanuncios --colony "Del Valle" --output delvalle.json
+
+<span class="comment"># Validar contra el schema PADIM</span>
+padim validate delvalle.json
+
+<span class="comment"># Calcular trust scores</span>
+padim quality delvalle.json
+
+<span class="comment"># Servir API local</span>
+padim serve --port 8080</pre>
+        </div>
+
+        <div class="btn-group">
+            <a href="https://github.com/PADIM-MX/padim" class="btn btn-primary" target="_blank">★ Star en GitHub</a>
+            <a href="https://github.com/PADIM-MX/padim/blob/main/MANIFIESTO.md" class="btn btn-ghost">Leer Manifiesto</a>
+        </div>
+    </section>
+
+    <!-- FILOSOFÍA: Desvinculación total -->
+    <section>
+        <div class="section-label">Open Source</div>
+        <h2>Desvinculación total</h2>
+        <p class="section-desc">
+            PADIM no almacena datos completos. PADIM es el índice.
+            Como Pirate Bay solo guarda magnet links, PADIM solo guarda
+            fingerprints y metadatos mínimos. Los datos completos viven en la red.
+        </p>
+
+        <div class="phil-grid">
+            <div class="phil-card">
+                <div class="phil-label">Índice</div>
+                <div class="phil-value">fingerprint + precio + colonia</div>
+                <div class="phil-sub">~200 bytes / propiedad</div>
+            </div>
+            <div class="phil-card">
+                <div class="phil-label">Datos completos</div>
+                <div class="phil-value">GitHub Releases + IPFS</div>
+                <div class="phil-sub-yellow">Magnet link verificable</div>
+            </div>
+        </div>
+
+        <div class="magnet-link">
+            magnet:?xt=urn:sha256:e765112b45b704ee20e6f7afb17458652fe3c455e3cd14b0d50d83171bb018cd&dn=padim-dataset-v2.0.0.zip
+        </div>
+    </section>
+
+    <footer>
+        <p class="tagline">PADIM — Protocolo Abierto de Datos Inmobiliarios de México</p>
+        <div class="licenses">
+            <a href="https://creativecommons.org/publicdomain/zero/1.0/">Estándar: CC0 1.0</a>
+            <a href="https://opensource.org/licenses/MIT">Herramientas: MIT</a>
+            <span>Datos: CC0 (sin restricciones)</span>\n            <span>PADIM es un proyecto independiente y abierto</span>
+        </div>
+        <p class="motto">Hecho en México · Datos de todos · Propiedad de nadie</p>
+    </footer>
+
+</div>
+
+<script>
+    function animateCounters() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.metric .num').forEach(el => {
+                        const text = el.textContent.replace(/,/g, '');
+                        const target = parseInt(text.replace(/[^0-9]/g, '')) || 0;
+                        if (target > 100) {
+                            let current = 0;
+                            const step = Math.ceil(target / 60);
+                            const interval = setInterval(() => {
+                                current += step;
+                                if (current >= target) {
+                                    current = target;
+                                    clearInterval(interval);
+                                }
+                                el.textContent = current.toLocaleString('es-MX');
+                            }, 20);
+                        }
+                    });
+                    observer.disconnect();
+                }
+            });
+        });
+        const metrics = document.querySelector('.metrics');
+        if (metrics) observer.observe(metrics);
+    }
+    document.addEventListener('DOMContentLoaded', animateCounters);
+</script>
+
+</body>
+</html>

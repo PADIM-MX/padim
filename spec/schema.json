@@ -1,8 +1,8 @@
 {
   "name": "padim",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Protocolo Abierto de Datos Inmobiliarios de México",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "required": ["source", "source_id", "property_type", "business_type", "price", "currency"],
@@ -10,7 +10,8 @@
     "source": {
       "type": "string",
       "description": "Fuente de los datos (vivanuncios, easybroker, inegi, catastro, shf, contribucion_directa)",
-      "enum": ["vivanuncios", "easybroker", "inegi", "catastro", "shf", "contribucion_directa"]
+      "enum": ["vivanuncios", "inmuebles24", "lamudi", "propiedades", "easybroker",
+               "inegi", "catastro", "shf", "contribucion_directa"]
     },
     "source_id": {
       "type": "string",

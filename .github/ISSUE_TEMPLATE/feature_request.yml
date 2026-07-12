@@ -1,0 +1,23 @@
+name: Feature Request
+description: Sugiere una mejora para PADIM
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Describe la funcionalidad que te gustaría ver.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema que resuelve
+      placeholder: "Como [usuario], quiero [funcionalidad] para [beneficio]"
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solución propuesta
+      placeholder: Descripción de cómo debería funcionar
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas

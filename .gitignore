@@ -18,12 +18,20 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Data
-# NOTA: No ignoramos .json de datos porque PADIM 
-# necesita incluir datasets de ejemplo. 
-# Los datos grandes van en releases, no en el repo.
+# Scrapers (moved to separate repo: Trogloautoegocrata/padim-scrapers)
+padim/scrapers/
+scripts/daily_scrape.sh
+scripts/scrape_*.py
+scripts/check_deps.py
+config.yaml
 
-# Environment
+# Data
+# NOTA: propiedades.jsonl (~20KB) se versiona en git directamente.
+# Cuando crezca a 500K+ props (>50MB), migrar a DVC con remote público.
+data/*.json
+!data/propiedades.jsonl
+
+# IDE
 .env
 .env.*
 *.log

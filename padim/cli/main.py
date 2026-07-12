@@ -443,10 +443,26 @@ def start_server(port: int = 8080):
 
         # Cargar datos disponibles
         properties_cache = []
+        # Intentar NDJSON primero (propiedades.jsonl)
+        jsonl_file = Path("data/propiedades.jsonl")
+        if jsonl_file.exists():
+            with open(jsonl_file) as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        try:
+                            properties_cache.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            pass
+        # Fallback a padim_data.json
         data_file = Path("padim_data.json")
-        if data_file.exists():
+        if not properties_cache and data_file.exists():
             with open(data_file) as f:
-                properties_cache = json.load(f)
+                data = json.load(f)
+                if isinstance(data, list):
+                    properties_cache = data
+                else:
+                    properties_cache = [data]
 
         @app.get("/")
         def root():
@@ -552,9 +568,47 @@ def start_server(port: int = 8080):
                 "avg_trust": sum(p.get("trust_score", 0.5) for p in properties_cache) / total if total else 0,
             }
 
+        @app.post("/v1/contributions")
+        def post_contributions(body: dict):
+            """Recibe propiedades de contribuidores externos."""
+            from uuid import uuid4
+            source_name = body.get("source", "contribucion_directa")
+            items = body.get("properties", [])
+            if not items:
+                return {"error": "No properties in body", "accepted": 0}
+            
+            accepted = 0
+            for item in items:
+                try:
+                    prop = {
+                        "source": source_name,
+                        "source_id": str(uuid4()),
+                        "source_url": item.get("source_url", ""),
+                        "title": item.get("title", item.get("property_type", "otro")),
+                        "description": item.get("description", None),
+                        "property_type": item.get("property_type", "otro"),
+                        "business_type": item.get("business_type", "venta"),
+                        "price": int(item.get("price", 0)),
+                        "currency": item.get("currency", "MXN"),
+                        "m2_constructed": item.get("m2_constructed", None),
+                        "bedrooms": item.get("bedrooms", None),
+                        "bathrooms": item.get("bathrooms", None),
+                        "address": item.get("address", ""),
+                        "colony": item.get("colony", ""),
+                        "state": item.get("state", ""),
+                        "images": item.get("images", []),
+                        "scraped_at": datetime.now(timezone.utc).isoformat(),
+                    }
+                    properties_cache.append(prop)
+                    accepted += 1
+                except Exception:
+                    pass
+            
+            return {"source": source_name, "accepted": accepted, "total": len(items)}
+
         print(f"  🌐 PADIM API corriendo en http://0.0.0.0:{port}")
         print(f"  📚 Documentación: http://0.0.0.0:{port}/docs")
-        print(f"  📡 Endpoints: /v1/properties, /v1/market/{{colony}}, /v1/stats")
+        print(f"  📡 Endpoints: /v1/properties, /v1/market/{{colony}}, /v1/stats, /v1/contributions")
         uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
     except ImportError as e:
@@ -650,22 +704,43 @@ def cmd_validate(args):
     print(f"🔍 Validando {args.file} contra schema v2.0...")
     try:
         with open(args.file) as f:
-            data = json.load(f)
+            raw = f.read().strip()
+
+        # Intentar como JSON array primero
+        if raw.startswith("["):
+            data = json.loads(raw)
+        # Intentar como NDJSON (objeto por linea)
+        elif raw.startswith("{"):
+            lines = [l.strip() for l in raw.split("\n") if l.strip()]
+            data = []
+            for line in lines:
+                try:
+                    data.append(json.loads(line))
+                except json.JSONDecodeError:
+                    pass
+            if not data:
+                print("   No se pudo parsear ningun objeto del archivo")
+                return 1
+            print(f"   Detectado formato NDJSON ({len(lines)} lineas, {len(data)} validas)")
+        else:
+            print("   Formato no reconocido")
+            return 1
+
         valid, errors = validate_against_schema(data)
         if valid:
             items = data if isinstance(data, list) else [data]
-            print(f"   ✅ {len(items)} propiedades válidas")
+            print(f"   OK {len(items)} propiedades validas")
             return 0
         else:
-            print(f"   ❌ {len(errors)} errores:")
+            print(f"   ERROR {len(errors)} errores:")
             for e in errors:
-                print(f"      • {e}")
+                print(f"      * {e}")
             return 1
     except FileNotFoundError:
-        print(f"   ❌ Archivo no encontrado: {args.file}")
+        print(f"   Archivo no encontrado: {args.file}")
         return 1
     except json.JSONDecodeError as e:
-        print(f"   ❌ JSON inválido: {e}")
+        print(f"   JSON invalido: {e}")
         return 1
 
 

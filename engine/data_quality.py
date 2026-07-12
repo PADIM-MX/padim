@@ -1,5 +1,5 @@
 """
-BACKBONE — Sistema de Frescura y Calidad de Datos
+PADIM — Sistema de Frescura y Calidad de Datos
 v1.0.0
 Convierte datos basura (listings muertos) en información útil mediante:
 1. Freshness scoring con decaimiento exponencial

@@ -1,5 +1,5 @@
 """
-BACKBONE — Sistema de Inteligencia y Confianza de Datos (Data Trust Engine)
+PADIM — Sistema de Inteligencia y Confianza de Datos (Data Trust Engine)
 v1.0.0
 
 NO es un sistema de calidad de datos tradicional.
@@ -410,23 +410,23 @@ class TrustEngine:
         self.agent_trust: Dict[str, float] = {}  # agent_name -> trust score
         self.colony_market: Dict[str, float] = {}  # "colony,municipio" -> avg price_m2
     
-    async def analyze(
+    def analyze(
         self,
         property_id: str,
         source: str,
         title: str,
         description: str,
-        price: Optional[float],
-        price_m2: Optional[float],
-        property_type: str,
-        last_updated: Optional[datetime],
-        days_on_market: Optional[int],
-        price_changes: int,
-        source_count: int,
-        colony: Optional[str],
-        municipality: Optional[str],
-        agent_name: Optional[str],
-        agent_properties_count: int,
+        price: Optional[float] = None,
+        price_m2: Optional[float] = None,
+        property_type: str = "otro",
+        last_updated: Optional[datetime] = None,
+        days_on_market: Optional[int] = None,
+        price_changes: int = 0,
+        source_count: int = 1,
+        colony: Optional[str] = None,
+        municipality: Optional[str] = None,
+        agent_name: Optional[str] = None,
+        agent_properties_count: int = 0,
     ) -> PropertyIntelligence:
         
         intelligence = PropertyIntelligence(property_id=property_id)
@@ -486,13 +486,13 @@ SOURCE_TRUST_WEIGHTS = {
 # DEMO
 # ═══════════════════════════════════════════════════════════════
 
-async def demo():
+def demo():
     """Demo del Trust Engine con casos reales"""
     engine = TrustEngine()
     
     # Caso 1: EasyBroker property (2 años sin actualizar)
     print("=== CASO 1: EasyBroker property (2 años sin update) ===")
-    result = await engine.analyze(
+    result = engine.analyze(
         property_id="EB-123",
         source="easybroker",
         title="Hermoso departamento en Polanco",
@@ -517,7 +517,7 @@ async def demo():
     
     # Caso 2: Vivanuncios property (recién actualizada)
     print("=== CASO 2: Vivanuncios property (2 días) ===")
-    result = await engine.analyze(
+    result = engine.analyze(
         property_id="VV-456",
         source="vivanuncios",
         title="Casa en renta en Lomas de Chapultepec",
@@ -542,7 +542,7 @@ async def demo():
     
     # Caso 3: Fraude potencial (precio bajo + keywords de remate)
     print("=== CASO 3: Posible fraude ===")
-    result = await engine.analyze(
+    result = engine.analyze(
         property_id="FR-789",
         source="vivanuncios",
         title="Remate bancario, urge vender, oportunidad única",

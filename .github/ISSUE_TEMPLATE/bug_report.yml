@@ -1,0 +1,26 @@
+name: Bug Report
+description: Reporta un error en PADIM
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Gracias por reportar. Revisa que no sea un issue duplicado.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción
+      placeholder: Qué pasó, qué esperabas que pasara
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir
+      placeholder: 1. Ejecuté 'padim scrape...'
+  - type: input
+    id: version
+    attributes:
+      label: Versión de PADIM
+      placeholder: "padim --version"
+    validations:
+      required: true
