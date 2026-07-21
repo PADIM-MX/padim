@@ -10,6 +10,7 @@ from padim.cli.scraper_manager import (
     cmd_scrapers_install,
     cmd_scrapers_list,
     cmd_scrapers_update,
+    cmd_scrapers_verify,
     SCRAPER_DIR,
 )
 
@@ -60,6 +61,8 @@ def cmd_scrapers(args):
         return cmd_scrapers_list(args)
     elif args.scrapers_action == "update":
         return cmd_scrapers_update(args)
+    elif args.scrapers_action == "verify":
+        return cmd_scrapers_verify(args)
     return 1
 
 
@@ -144,6 +147,9 @@ def main():
     p_list = p_scrapers_sub.add_parser("list", help="Lista scrapers disponibles e instalados")
 
     p_update = p_scrapers_sub.add_parser("update", help="Actualiza scrapers instalados")
+
+    p_verify = p_scrapers_sub.add_parser("verify", help="Verifica seguridad de un scraper antes de publicarlo")
+    p_verify.add_argument("file", help="Ruta al archivo .py del scraper")
 
     p_val = sub.add_parser("validate", help="Valida datos contra schema")
     p_val.add_argument("file")

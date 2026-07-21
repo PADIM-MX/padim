@@ -13,6 +13,126 @@ MANIFEST_URL = "https://codeberg.org/CamaradaMexicano389/mx-property-scrapers/ra
 MANIFEST_FALLBACK_URL = "https://raw.githubusercontent.com/CamaradaMexicano389/mx-property-scrapers/main/manifest.json"
 SCRAPER_DIR = Path.home() / ".padim" / "scrapers"
 
+# Patrones peligrosos para escaneo de seguridad
+DANGEROUS_PATTERNS = [
+    ("os.system", "Ejecución de comandos del sistema"),
+    ("subprocess.Popen", "Ejecución de procesos"),
+    ("subprocess.run", "Ejecución de procesos"),
+    ("subprocess.call", "Ejecución de procesos"),
+    ("eval(", "Evaluación dinámica de código"),
+    ("exec(", "Ejecución dinámica de código"),
+    ("__import__(", "Importación dinámica"),
+    ("compile(", "Compilación dinámica"),
+    ("base64.b64decode", "Ofuscación potencial"),
+    ("bytearray(", "Ofuscación potencial"),
+    ("socket.", "Conexiones de red directas"),
+    ("urllib.request", "Descarga de contenido externo"),
+    ("requests.get", "Descarga de contenido externo"),
+    ("requests.post", "Envío de datos a externo"),
+]
+
+
+# ── Escáner de seguridad ──
+
+def scan_security(filepath: Path) -> list:
+    """Escanea un archivo Python en busca de patrones peligrosos."""
+    findings = []
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+            lines = f.readlines()
+    except Exception as e:
+        findings.append(f"❌ No se pudo leer el archivo: {e}")
+        return findings
+
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        for pattern, desc in DANGEROUS_PATTERNS:
+            if pattern in stripped:
+                findings.append(f"⚠️  Línea {i}: {desc} detectado ({pattern})")
+                break  # una alerta por línea máximo
+
+    return findings
+
+
+def validate_structure(filepath: Path) -> list:
+    """Valida que el scraper tenga la estructura esperada."""
+    findings = []
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
+    except Exception as e:
+        findings.append(f"❌ No se pudo leer: {e}")
+        return findings
+
+    if "def run(" not in content and "def main(" not in content:
+        findings.append("❌ Debe tener función run() o main()")
+
+    if content.strip() == "":
+        findings.append("❌ Archivo vacío")
+
+    return findings
+
+
+def compute_sha256(filepath: Path) -> str:
+    """Calcula SHA256 del archivo."""
+    sha256 = hashlib.sha256()
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            sha256.update(chunk)
+    return sha256.hexdigest()
+
+
+def cmd_scrapers_verify(args):
+    """Verifica que un scraper sea seguro antes de subirlo."""
+    filepath = Path(args.file)
+
+    if not filepath.exists():
+        print(f"❌ Archivo no encontrado: {args.file}")
+        return 1
+
+    print(f"🔍 Verificando {filepath.name}...")
+    print()
+
+    # 1. Escaneo de seguridad
+    print("── Seguridad ──")
+    sec_issues = scan_security(filepath)
+    if sec_issues:
+        for issue in sec_issues:
+            print(f"   {issue}")
+    else:
+        print("   ✅ Sin patrones peligrosos detectados")
+
+    # 2. Estructura
+    print()
+    print("── Estructura ──")
+    struct_issues = validate_structure(filepath)
+    if struct_issues:
+        for issue in struct_issues:
+            print(f"   {issue}")
+    else:
+        print("   ✅ Estructura válida (función run() o main() presente)")
+
+    # 3. SHA256
+    print()
+    sha = compute_sha256(filepath)
+    print(f"── Checksum ──")
+    print(f"   SHA256: {sha}")
+
+    # Resumen
+    print()
+    total_issues = len(sec_issues) + len(struct_issues)
+    if total_issues == 0:
+        print(f"✅ {filepath.name} pasó todas las verificaciones")
+        print(f"   Listo para contribuir al repositorio de scrapers")
+        print(f"   SHA256 para manifest.json: {sha}")
+        return 0
+    else:
+        print(f"⚠️  {total_issues} problema(s) encontrado(s)")
+        print(f"   Revisa las advertencias antes de compartir este scraper")
+        return 1
+
 
 def _ensure_dir():
     SCRAPER_DIR.mkdir(parents=True, exist_ok=True)
