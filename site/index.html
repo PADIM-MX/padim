@@ -1547,7 +1547,7 @@ padim quality delvalle.json</pre>
             if(!q)return;
             showLoading();
             const tipo=sel?.value==='Todas'?'':sel?.value||'';
-            let url='//'+location.hostname+':8090/v1/properties?q='+encodeURIComponent(q)+'&limit=15';
+            let url='https://api.back-bone.dev/v1/properties?colony='+encodeURIComponent(q)+'&limit=15';
             if(tipo)url+='&tipo='+encodeURIComponent(tipo);
             fetch(url)
                 .then(r=>{
