@@ -9,7 +9,8 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
-MANIFEST_URL = "https://raw.githubusercontent.com/CamaradaMexicano389/mx-property-scrapers/main/manifest.json"
+MANIFEST_URL = "https://codeberg.org/CamaradaMexicano389/mx-property-scrapers/raw/branch/main/manifest.json"
+MANIFEST_FALLBACK_URL = "https://raw.githubusercontent.com/CamaradaMexicano389/mx-property-scrapers/main/manifest.json"
 SCRAPER_DIR = Path.home() / ".padim" / "scrapers"
 
 
@@ -18,13 +19,16 @@ def _ensure_dir():
 
 
 def fetch_manifest():
-    """Descarga el manifiesto de scrapers disponibles."""
-    try:
-        resp = urllib.request.urlopen(MANIFEST_URL, timeout=10)
-        return json.loads(resp.read().decode())
-    except Exception as e:
-        print(f"❌ No se pudo descargar el manifiesto: {e}")
-        return None
+    """Descarga el manifiesto de scrapers disponibles (Codeberg → GitHub → jsDelivr)."""
+    urls = [MANIFEST_URL, MANIFEST_FALLBACK_URL]
+    for url in urls:
+        try:
+            resp = urllib.request.urlopen(url, timeout=10)
+            return json.loads(resp.read().decode())
+        except Exception:
+            continue
+    print("❌ No se pudo descargar el manifiesto desde ninguna fuente.")
+    return None
 
 
 def verify_checksum(filepath: Path, expected_sha256: str) -> bool:
