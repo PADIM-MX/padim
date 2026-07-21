@@ -10,9 +10,20 @@ import os
 
 def cmd_scrape(args):
     """Scrapea propiedades de una fuente."""
-    print(f"📡 Scrapeando {args.source} para colonia: {args.colony}")
-    print(f"   Output: {args.output}")
-    print("   (Conector no implementado en esta versión)")
+    print("⚠️  Los conectores de scraping se distribuyen por separado.")
+    print("")
+    print("   PADIM solo distribuye el estándar, schema y herramientas de validación.")
+    print("   Los scrapers funcionales viven en un repositorio independiente:")
+    print("")
+    print(f"      https://github.com/Trogloautoegocrata/mx-property-scrapers")
+    print("")
+    print("   Para usar scraping, clona ese repositorio:")
+    print("")
+    print("      git clone https://github.com/Trogloautoegocrata/mx-property-scrapers")
+    print("      cd mx-property-scrapers")
+    print("      python3 scrape_vivanuncios.py")
+    print("")
+    print("   📖 Más información en el README del proyecto.")
     return 0
 
 def cmd_validate(args):

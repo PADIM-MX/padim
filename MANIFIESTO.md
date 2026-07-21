@@ -139,21 +139,17 @@ El estándar HTTP es gratis. Las empresas que construyen sobre HTTP valen billon
 
 OpenStreetMap es gratis. Las empresas que usan OSM para logística valen miles de millones.
 
-**PADIM es gratis. BACKBONE cobra por lo que PADIM no puede dar:**
+**La economía del protocolo es simple: la infraestructura es abierta, los servicios que se construyen sobre ella son competitivos.**
 
-| PADIM da | BACKBONE cobra |
-|----------|----------------|
-| Datos crudos | Datos curados con trust scoring |
-| API sin SLA | API con SLA 99.9% |
-| Trust Engine básico | Trust Engine completo con ML |
-| Sin soporte | Soporte enterprise |
-| Sin webhooks | Webhooks en tiempo real |
-| Sin integraciones | Plugins CRM (Salesforce, GHL, HubSpot) |
-| Sin garantía | AVM certificado con precisión documentada |
+Un protocolo abierto de datos no se sostiene con ventas. Se sostiene con adopción. Y la adopción ocurre cuando el protocolo resuelve un problema real mejor que cualquier alternativa.
 
-Este no es un modelo de "versión gratuita vs versión paga". Es un modelo probado de **infraestructura pública + servicios profesionales**, exactamente como funciona con Linux y Red Hat, o con MongoDB Community y Atlas.
+Quien adopta PADIM gana:
+- **Un lenguaje común** para describir propiedades, independientemente de la plataforma
+- **Datos verificables** con un sistema de confianza público y transparente
+- **Independencia de plataforma** — los datos no están atados a ningún portal
+- **Participación en un estándar** que cualquiera puede mejorar
 
-La diferencia fundamental es que PADIM no es una empresa. PADIM es un protocolo. No tiene dueño. No se puede comprar, vender ni cerrar. BACKBONE es un servicio comercial que existe sobre el protocolo, exactamente como cualquier otra empresa que decida construir sobre PADIM.
+Quien construye sobre PADIM —sea startup, agencia, portal o institución— puede ofrecer servicios de valor agregado sobre la infraestructura abierta. El protocolo no compite con sus usuarios. Los fortalece.
 
 ---
 
@@ -173,23 +169,27 @@ PADIM se construye con la participación de quienes decidan sumarse. No hay una 
 
 ---
 
-## VI. De la Relación con BACKBONE
+## VI. De la Gobernanza del Ecosistema
 
-BACKBONE (`https://back-bone.dev`) es la primera API de datos inmobiliarios de México. Es una **implementación del estándar PADIM** en su versión enterprise.
+PADIM es un protocolo abierto. Como tal, su fortaleza no está en quién lo controla, sino en que nadie puede controlarlo. Cualquier persona, empresa o institución puede implementar el estándar, contribuir datos, construir herramientas y ofrecer servicios sobre él.
 
-La relación es complementaria:
+El ecosistema PADIM opera en **tres capas independientes**:
 
-**BACKBONE necesita a PADIM** porque BACKBONE, como empresa, no puede cubrir todo México. BACKBONE concentra sus recursos en curaduría, infraestructura y soporte. PADIM, como comunidad, puede alcanzar colonias y zonas que BACKBONE nunca cubriría por sí solo.
+**Capa 1 — El Estándar (Inmutable)**
+El schema de datos, la especificación REST y el formato de intercambio. Es público, gratuito y cualquier cambio requiere consenso de la comunidad. Esta capa no tiene dueño.
 
-**PADIM necesita a BACKBONE** porque BACKBONE produce datos curados de alta calidad que retroalimentan el acervo público. BACKBONE entrena modelos que mejoran el Trust Engine. BACKBONE financia infraestructura que beneficia a todo el ecosistema.
+**Capa 2 — Las Herramientas (Evolutivas)**
+El software que permite implementar el estándar: CLI, Trust Engine, validadores, conectores. Son mantenidos por la comunidad y evolucionan con ella. Si una herramienta deja de mantenerse, otra puede reemplazarla.
 
-**La línea es clara:**
-- PADIM = los datos abiertos, el estándar, las herramientas libres
-- BACKBONE = el servicio enterprise, la curaduría, el SLA, el soporte
+**Capa 3 — Los Servicios (Competitivos)**
+Cualquier persona o empresa puede construir servicios comerciales sobre PADIM: APIs curadas, dashboards, análisis, soporte enterprise, integraciones. Estos servicios compiten en el mercado libre. El protocolo no favorece a ninguno.
 
-Uno no puede cerrar al otro. Si BACKBONE desapareciera mañana, PADIM seguiría existiendo. Si PADIM desapareciera, BACKBONE perdería su fuente de datos comunitaria pero conservaría su propio pipeline.
+Esta separación garantiza que:
+- **Ningún participante puede cerrar el protocolo**
+- **Ningún servicio tiene ventaja sobre otro por diseño**
+- **La comunidad siempre puede bifurcar y continuar**
 
-Esta separación es la garantía de que el protocolo nunca será secuestrado por intereses comerciales.
+PADIM no necesita defenders de nadie. Su fortaleza es estructural: mientras el estándar resuelva un problema real, el ecosistema se sostiene solo.
 
 ---
 

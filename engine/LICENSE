@@ -14,11 +14,11 @@ para el ecosistema y está protegido por **AGPL v3**.
 - El uso comercial directo del Trust Engine como parte de un servicio requiere
   que el servicio completo se distribuya bajo AGPL v3.
 
-### Excepción para BACKBONE
+### Licencia Comercial Disponible
 
-BACKBONE (`https://back-bone.dev`) tiene una **licencia comercial separada** 
-que le permite usar el Trust Engine como parte de su API SaaS sin publicar 
-sus modificaciones. Contacta a info@back-bone.dev para más información.
+Cualquier persona o entidad que desee usar el Trust Engine como parte de 
+un servicio SaaS sin publicar sus modificaciones puede solicitar una 
+**licencia comercial**. Contacta a info@back-bone.dev para más información.
 
 ---
 
