@@ -75,7 +75,7 @@
             margin-bottom: 2rem;
         }
         .hero h1 {
-            font-size: 3.6rem;
+            font-size: clamp(1.7rem, 5.5vw, 3.6rem);
             font-weight: 800;
             letter-spacing: -0.03em;
             color: var(--text-bright);
@@ -571,6 +571,144 @@
             font-family: var(--font);
         }
 
+        /* ── HAMBURGER MENU ── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 34px;
+            height: 34px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+            position: relative;
+        }
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--text-dim);
+            border-radius: 2px;
+            transition: all .3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+            background: var(--accent);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+            background: var(--accent);
+        }
+
+        /* Mobile nav overlay */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity .3s ease;
+        }
+        .nav-overlay.open {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Mobile nav panel — slide from right */
+        .nav-panel {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 260px;
+            height: 100vh;
+            height: 100dvh;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            z-index: 999;
+            padding: 5.5rem 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            transition: right .35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+        .nav-panel.open {
+            right: 0;
+        }
+        .nav-panel .nav-brand {
+            font-family: var(--mono);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            letter-spacing: 0.08em;
+            padding: 0 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0.75rem;
+        }
+        .nav-panel .nav-brand span { color: var(--accent); }
+        .nav-panel a {
+            display: block;
+            padding: 0.8rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all .2s;
+            letter-spacing: 0.02em;
+        }
+        .nav-panel a:hover,
+        .nav-panel a:active {
+            color: var(--text-bright);
+            background: var(--bg);
+        }
+        .nav-panel .nav-github {
+            margin-top: auto;
+            padding: 0.8rem 0.75rem;
+            color: var(--accent-dim);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+        .nav-panel .nav-github a { display: inline; padding: 0; color: var(--accent); }
+        .nav-panel .nav-github a:hover { text-decoration: underline; background: none; }
+
+        /* Prevent body scroll when panel open */
+        body.nav-open { overflow: hidden; }
+
+        /* ── MOBILE ENHANCEMENTS ── */
+        html { scroll-padding-top: 80px; }
+        body { overflow-x: hidden; }
+
+        /* Table horizontal scroll on mobile */
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1.5rem 0;
+        }
+        .table-wrap::-webkit-scrollbar { height: 4px; }
+        .table-wrap::-webkit-scrollbar-track { background: var(--bg); }
+        .table-wrap::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+        .table-wrap .props-table { margin-bottom: 0; }
+
+        /* Safe area for notched devices */
+        footer { padding-bottom: max(5rem, env(safe-area-inset-bottom, 1rem)); }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 1024px) {
             .hero h1 { font-size: 2.8rem; }
@@ -678,6 +816,222 @@
         @media (max-width: 640px) {
             .map-container { height: 280px; }
         }
+        /* ── HAMBURGER VISIBLE IN MOBILE ── */
+        @media (max-width: 768px) {
+            .topbar nav { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        /* ── RESULTS PANEL (inline search) ── */
+        .results-panel {
+            display: none;
+            margin-top: 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all .3s ease;
+        }
+        .results-panel.open {
+            display: block;
+        }
+        .results-panel .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .results-panel .results-header .count {
+            font-family: var(--mono);
+            color: var(--text-bright);
+        }
+        .results-panel .results-header .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            transition: all .2s;
+        }
+        .results-panel .results-header .close-btn:hover {
+            background: var(--bg);
+            color: var(--text-bright);
+        }
+        .results-panel .results-body {
+            padding: 1rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .results-panel .results-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .results-panel .results-body::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        .results-panel .results-body::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+        .prop-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 0.75rem;
+            transition: border-color .2s, background .2s;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.75rem 1.5rem;
+            align-items: start;
+        }
+        .prop-card:hover {
+            border-color: var(--accent-dim);
+            background: var(--surface);
+        }
+        .prop-card:last-child {
+            margin-bottom: 0;
+        }
+        .prop-card .prop-title {
+            font-weight: 600;
+            color: var(--text-bright);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            grid-column: 1;
+        }
+        .prop-card .prop-price {
+            font-family: var(--mono);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            grid-column: 2;
+            grid-row: 1;
+            white-space: nowrap;
+            text-align: right;
+        }
+        .prop-card .prop-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.25rem;
+            grid-column: 1;
+            font-size: 0.8rem;
+            color: var(--text);
+        }
+        .prop-card .prop-details span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .prop-card .prop-details .detail-icon {
+            opacity: 0.5;
+            font-size: 0.75rem;
+        }
+        .prop-card .prop-meta {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+        .prop-card .prop-meta .trust-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: var(--mono);
+        }
+        .prop-card .prop-meta .source-tag {
+            font-family: var(--mono);
+            color: var(--accent-dim);
+        }
+        .prop-card .prop-meta .colony-tag {
+            color: var(--text-dim);
+        }
+        .results-loading {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-dim);
+        }
+        .results-loading .spinner {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .results-empty {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-dim);
+        }
+        .results-empty .big-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            opacity: 0.5;
+        }
+        .results-empty p {
+            font-size: 0.9rem;
+        }
+        .results-error {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--red);
+        }
+        .results-error .big-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .results-error p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        .results-error .err-msg {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            opacity: 0.6;
+        }
+        .results-panel .results-footer {
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+        .results-panel .results-footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            .prop-card {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            .prop-card .prop-price {
+                grid-column: 1;
+                grid-row: auto;
+                text-align: left;
+            }
+            .results-panel .results-header {
+                padding: 0.75rem 1rem;
+                font-size: 0.75rem;
+            }
+            .results-panel .results-body {
+                padding: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -692,20 +1046,26 @@
             <a href="#datos">Datos</a>
             <a href="#trust">Trust</a>
             <a href="#cli">CLI</a>
+            <a href="colaborar.html">Colaborar</a>
             <a href="https://github.com/PADIM-MX/padim" target="_blank">GitHub</a>
         </nav>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
     <!-- HERO: Search bar como centro visual -->
     <section class="hero">
         <div class="tag">Protocolo Abierto de Datos Inmobiliarios de México</div>
         <h1>
-            <em>51,721</em> propiedades.<br>
+            <em>102,468</em> propiedades.<br>
             <em>6</em> fuentes. <em>1</em> API.
         </h1>
         <p>
             Datos inmobiliarios de México, gratuitos, abiertos y verificados por un Trust Engine comunitario.
-            Sin registro. Sin API key. Sin límite.
+            Sin registro. Sin API key. Sin límite de uso.
         </p>
 
         <div class="search-wrap">
@@ -716,17 +1076,29 @@
                         <option>Venta</option>
                         <option>Renta</option>
                     </select>
-                    <button onclick="alert('🔍 Buscaría: ' + document.getElementById('search-input').value + '\n\n(La búsqueda en vivo se conecta a la API de BACKBONE)' )">Buscar →</button>
+                    <button id="search-btn">Buscar →</button>
                 </div>
         <div class="hero-hints">
             Prueba: <kbd>Del Valle</kbd> <kbd>Condesa</kbd> <kbd>Polanco</kbd> <kbd>CDMX</kbd>
+        </div>
+
+        <!-- RESULTS PANEL (inline) -->
+        <div class="results-panel" id="results-panel">
+            <div class="results-header">
+                <span>Resultados: <span class="count" id="results-count">0</span></span>
+                <button class="close-btn" id="results-close" aria-label="Cerrar resultados">✕</button>
+            </div>
+            <div class="results-body" id="results-body"></div>
+            <div class="results-footer">
+                Datos de <a href="https://api.back-bone.dev" target="_blank">api.back-bone.dev</a> · <a href="https://padim.enmexico.casa" target="_blank">PADIM</a>
+            </div>
         </div>
     </section>
 
     <!-- METRICS: Prueba social instantánea -->
     <div class="metrics">
         <div class="metric">
-            <div class="num" id="total-props">51,721</div>
+            <div class="num" id="total-props">102,468</div>
             <div class="label">Propiedades</div>
             <div class="sub">activas verificadas</div>
         </div>
@@ -778,10 +1150,10 @@
     <!-- API: Stripe-style developer docs -->
     <section id="api">
         <div class="section-label">API REST</div>
-        <h2>Sin registro. Sin key. Sin límite.</h2>
+        <h2>Sin registro. Sin key. Sin límite de uso.</h2>
         <p class="section-desc">
-            51,721 propiedades con trust score. Abierto a cualquier aplicación.
-            Sin autenticación. Sin rate limiting. Sin sorpresas.
+            102,468 propiedades con trust score. Abierto a cualquier aplicación.
+            Sin autenticación. Sin rate limits visibles. Sin sorpresas.
         </p>
 
         <div class="api-block">
@@ -817,7 +1189,7 @@
 
         <div class="btn-group">
             <a href="https://api.back-bone.dev/v1/properties?limit=5" class="btn btn-primary" target="_blank">Probar API →</a>
-            <a href="https://github.com/PADIM-MX/padim" class="btn btn-ghost">Documentación completa</a>
+            <a href="https://github.com/PADIM-MX/padim" class="btn btn-ghost" target="_blank" rel="noopener">Documentación completa</a>
         </div>
     </section>
 
@@ -830,6 +1202,7 @@
             El score indica qué tan confiable es el dato.
         </p>
 
+        <div class="table-wrap">
         <table class="props-table">
             <thead>
                 <tr>
@@ -885,13 +1258,14 @@
                 <tr>
                     <td><span class="trust-dot trust-low"></span>0.18</td>
                     <td class="prop-title">Terreno Lomas de Chapultepec</td>
-                    <td class="price-cell">$2,100,000</td>
+                    <td class="price-cell">$2,150,000</td>
                     <td>Lomas</td>
                     <td>Vivanuncios</td>
                     <td>—</td>
                 </tr>
             </tbody>
         </table>
+        </div>
         <div class="table-legend">
             <span><span class="trust-dot trust-high"></span> Trust alto (0.7–1.0)</span>
             <span><span class="trust-dot trust-mid"></span> Trust medio (0.3–0.7)</span>
@@ -899,14 +1273,14 @@
         </div>
     </section>
 
-    <!-- TRUST ENGINE: Diferenciador clave, símil TPB seeders -->
+    <!-- TRUST ENGINE: Score tipo Rotten Tomatoes para datos inmobiliarios -->
     <section id="trust">
         <div class="section-label">Trust Engine</div>
-        <h2>Seeders para datos inmobiliarios</h2>
+        <h2>Score de confianza para cada propiedad</h2>
         <p class="section-desc">
-            Como Pirate Bay muestra seeders y leechers para medir la confianza de un torrent,
-            PADIM asigna un Trust Score a cada propiedad basado en señales de calidad,
-            antigüedad y consistencia entre fuentes.
+            Como Rotten Tomatoes agrega críticas para calcular un score, PADIM agrega
+            señales de calidad —antigüedad, consistencia entre fuentes, historial del
+            publicador— y asigna un Trust Score a cada propiedad.
         </p>
 
         <div class="trust-demo">
@@ -914,24 +1288,24 @@
                 <div class="ts" style="color:var(--green)">0.92</div>
                 <div class="ts-label">Excelente</div>
                 <div class="ts-desc">Propiedad publicada hace menos de 7 días, confirmada por 3 fuentes independientes. Precio consistente con el promedio de la zona.</div>
-                <div class="ts-meta">Seeders: 12 · Leechers: 2</div>
+                <div class="ts-meta">Fuentes: 12 · Verificaciones: 2</div>
             </div>
             <div class="trust-item">
                 <div class="ts" style="color:var(--yellow)">0.52</div>
                 <div class="ts-label">Dudosa</div>
                 <div class="ts-desc">180 días sin actualizar. Una sola fuente. El precio está 20% por debajo del promedio. Posible ghost listing o dato obsoleto.</div>
-                <div class="ts-meta">Seeders: 1 · Leechers: 0</div>
+                <div class="ts-meta">Fuentes: 1 · Verificaciones: 0</div>
             </div>
             <div class="trust-item">
                 <div class="ts" style="color:var(--red)">0.12</div>
                 <div class="ts-label">Rechazada</div>
                 <div class="ts-desc">Patrón de fraude detectado: precio 80% por debajo del promedio de zona, texto con urgencia de cierre. No recomendada.</div>
-                <div class="ts-meta">Seeders: 0 · Leechers: 0</div>
+                <div class="ts-meta">Fuentes: 0 · Verificaciones: 0</div>
             </div>
         </div>
 
         <div class="btn-group">
-            <a href="https://github.com/PADIM-MX/padim/blob/main/engine/trust_engine.py" class="btn btn-ghost">Ver Trust Engine en GitHub →</a>
+            <a href="https://github.com/PADIM-MX/padim/blob/main/engine/trust_engine.py" class="btn btn-ghost" target="_blank" rel="noopener">Ver Trust Engine en GitHub →</a>
         </div>
     </section>
 
@@ -949,6 +1323,9 @@
             <pre><span class="comment"># Instalar</span>
 pip install padim
 
+<span class="comment"># Instalar un scraper (descarga del repositorio comunitario)</span>
+padim scrapers install vivanuncios
+
 <span class="comment"># Scrapear una colonia</span>
 padim scrape vivanuncios --colony "Del Valle" --output delvalle.json
 
@@ -956,26 +1333,25 @@ padim scrape vivanuncios --colony "Del Valle" --output delvalle.json
 padim validate delvalle.json
 
 <span class="comment"># Calcular trust scores</span>
-padim quality delvalle.json
-
-<span class="comment"># Servir API local</span>
-padim serve --port 8080</pre>
+padim quality delvalle.json</pre>
         </div>
 
         <div class="btn-group">
-            <a href="https://github.com/PADIM-MX/padim" class="btn btn-primary" target="_blank">★ Star en GitHub</a>
-            <a href="https://github.com/PADIM-MX/padim/blob/main/MANIFIESTO.md" class="btn btn-ghost">Leer Manifiesto</a>
+            <a href="https://github.com/PADIM-MX/padim" class="btn btn-primary" target="_blank" id="star-btn-core">★ Star en GitHub</a>
+            <a href="https://codeberg.org/CamaradaMexicano389/mx-property-scrapers" class="btn btn-ghost" target="_blank" id="star-btn-scrapers">🔌 Scrapers en Codeberg</a>
+            <a href="https://github.com/PADIM-MX/padim/blob/main/MANIFIESTO.md" class="btn btn-ghost" target="_blank" rel="noopener">Leer Manifiesto</a>
         </div>
     </section>
 
-    <!-- FILOSOFÍA: Desvinculación total -->
+    <!-- FILOSOFÍA: índice ligero, datos en la red -->
     <section>
         <div class="section-label">Open Source</div>
-        <h2>Desvinculación total</h2>
+        <h2>Índice ligero, datos en la red</h2>
         <p class="section-desc">
             PADIM no almacena datos completos. PADIM es el índice.
-            Como Pirate Bay solo guarda magnet links, PADIM solo guarda
-            fingerprints y metadatos mínimos. Los datos completos viven en la red.
+            Como OpenStreetMap almacena coordenadas y metadatos —no la foto satelital—,
+            PADIM guarda fingerprints y metadatos mínimos. Los datos completos
+            se distribuyen a través de GitHub Releases e IPFS.
         </p>
 
         <div class="phil-grid">
@@ -1000,7 +1376,7 @@ padim serve --port 8080</pre>
     <!-- QUASAR: Mapa de propiedades en vivo -->
     <section>
         <div class="section-label">Quasar · Mapa en Vivo</div>
-        <h2>50,000+ propiedades geolocalizadas</h2>
+        <h2>102,468+ propiedades geolocalizadas</h2>
         <p class="section-desc">
             Cada punto en el mapa es una propiedad real extraída de portales y fuentes abiertas.
             Los clusters muestran densidad por colonia. Filtra por tipo y operación.
@@ -1015,8 +1391,8 @@ padim serve --port 8080</pre>
             </iframe>
         </div>
         <div class="btn-group">
-            <a href="https://quasar.backbone.dev" class="btn btn-primary" target="_blank">⟁ Abrir Quasar</a>
-            <a href="https://back-bone.dev" class="btn btn-ghost">Enterprise API →</a>
+            <a href="https://quasar.enmexico.casa:8081" class="btn btn-primary" target="_blank">⟁ Abrir Quasar</a>
+            <a href="https://back-bone.dev" class="btn btn-ghost" target="_blank" rel="noopener">BACKBONE — Enterprise API →</a>
         </div>
     </section>
 
@@ -1027,13 +1403,13 @@ padim serve --port 8080</pre>
             <span style="color:var(--border);">·</span>
             <a href="/terminos" style="color:var(--text-dim);text-decoration:none;margin:0 0.5rem;">Términos</a>
             <span style="color:var(--border);">·</span>
-            <a href="/repo" style="color:var(--text-dim);text-decoration:none;margin:0 0.5rem;">GitHub</a>
+            <a href="https://github.com/PADIM-MX/padim" style="color:var(--text-dim);text-decoration:none;margin:0 0.5rem;" target="_blank">GitHub</a>
         </div>
         <div class="licenses">
-            <a href="https://creativecommons.org/publicdomain/zero/1.0/">Estándar: CC0 1.0</a>
-            <a href="https://opensource.org/licenses/MIT">Herramientas: MIT</a>
-            <a href="https://opendatacommons.org/licenses/odbl/">Datos: ODbL</a>
-            <a href="https://back-bone.dev">Enterprise API →</a>
+            <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">Estándar: CC0 1.0</a>
+            <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">Herramientas: MIT</a>
+            <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">Datos: ODbL</a>
+            <a href="https://back-bone.dev" target="_blank" rel="noopener">BACKBONE — Enterprise API →</a>
         </div>
         <p class="motto">
             <span class="motto-flag">
@@ -1082,6 +1458,218 @@ padim serve --port 8080</pre>
         if (metrics) observer.observe(metrics);
     }
     document.addEventListener('DOMContentLoaded', animateCounters);
+
+    // ── Search: inline — fetch API + render resultados en página ──
+    (function(){
+        const btn=document.getElementById('search-btn');
+        const inp=document.getElementById('search-input');
+        const sel=document.querySelector('.search-wrap select');
+        const panel=document.getElementById('results-panel');
+        const body=document.getElementById('results-body');
+        const countEl=document.getElementById('results-count');
+        const closeBtn=document.getElementById('results-close');
+
+        function formatPrice(n){
+            if(n==null)return '—';
+            return '$'+Number(n).toLocaleString('es-MX');
+        }
+
+        function trustClass(score){
+            if(score==null)return 'trust-low';
+            if(score>=0.7)return 'trust-high';
+            if(score>=0.3)return 'trust-mid';
+            return 'trust-low';
+        }
+
+        function trustLabel(score){
+            if(score==null)return 'N/A';
+            if(score>=0.7)return 'Alto';
+            if(score>=0.3)return 'Medio';
+            return 'Bajo';
+        }
+
+        function showLoading(){
+            body.innerHTML='<div class="results-loading"><div class="spinner"></div><p>Buscando propiedades…</p></div>';
+            panel.classList.add('open');
+            countEl.textContent='…';
+        }
+
+        function showError(msg){
+            body.innerHTML='<div class="results-error"><div class="big-icon">⚠️</div><p>No pudimos obtener resultados</p><div class="err-msg">'+msg+'</div></div>';
+            countEl.textContent='0';
+        }
+
+        function showEmpty(q){
+            body.innerHTML='<div class="results-empty"><div class="big-icon">🔍</div><p>Sin resultados para <strong>'+q+'</strong></p><p style="margin-top:0.5rem;font-size:0.8rem;opacity:0.7;">Prueba con otra colonia, ciudad o estado</p></div>';
+            countEl.textContent='0';
+        }
+
+        function renderProps(data,q){
+            if(!data||!data.length){
+                showEmpty(q);
+                return;
+            }
+            let html='';
+            data.forEach(p=>{
+                const title=p.title||p.name||'Propiedad';
+                const price=formatPrice(p.price);
+                const colony=p.colony||p.colonia||'—';
+                const state=p.state||p.estado||'—';
+                const beds=p.bedrooms||p.recamaras||p.rooms||'—';
+                const baths=p.bathrooms||p.banos||'—';
+                const m2=p.m2_const||p.m2||p.sqft||'—';
+                const trust=p.trust_score||p.trustScore;
+                const source=p.source||p.fuente||'—';
+                const url=p.url||p.link||null;
+                const ts=trust!=null?trust.toFixed(2):'—';
+
+                html+='<div class="prop-card">';
+                html+='<div class="prop-title">'+(url?'<a href="'+url+'" target="_blank" style="color:var(--text-bright);text-decoration:none;">'+title+'</a>':title)+'</div>';
+                html+='<div class="prop-price">'+price+'</div>';
+                html+='<div class="prop-details">';
+                if(beds!=='—')html+='<span><span class="detail-icon">🛏️</span> '+beds+' rec</span>';
+                if(baths!=='—')html+='<span><span class="detail-icon">🚿</span> '+baths+' baños</span>';
+                if(m2!=='—')html+='<span><span class="detail-icon">📐</span> '+m2+' m²</span>';
+                html+='</div>';
+                html+='<div class="prop-meta">';
+                html+='<span class="trust-badge"><span class="trust-dot '+trustClass(trust)+'"></span>'+ts+'</span>';
+                html+='<span class="colony-tag">📍 '+colony+', '+state+'</span>';
+                html+='<span class="source-tag">📡 '+source+'</span>';
+                html+='</div>';
+                html+='</div>';
+            });
+            body.innerHTML=html;
+            countEl.textContent=data.length;
+        }
+
+        function doSearch(){
+            const q=inp?.value?.trim();
+            if(!q)return;
+            showLoading();
+            const tipo=sel?.value==='Todas'?'':sel?.value||'';
+            let url='//'+location.hostname+':8090/v1/properties?q='+encodeURIComponent(q)+'&limit=15';
+            if(tipo)url+='&tipo='+encodeURIComponent(tipo);
+            fetch(url)
+                .then(r=>{
+                    if(!r.ok)throw new Error('HTTP '+r.status+': '+r.statusText);
+                    return r.json();
+                })
+                .then(json=>{
+                    // La API puede devolver {data:[...], ...} o un array directo
+                    const props=json.data||json.results||json.properties||(Array.isArray(json)?json:[]);
+                    renderProps(props,q);
+                })
+                .catch(err=>{
+                    console.error('PADIM search error:',err);
+                    showError(err.message);
+                });
+        }
+
+        btn?.addEventListener('click',doSearch);
+        inp?.addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
+        closeBtn?.addEventListener('click',function(){panel.classList.remove('open');});
+
+        // Hero hints: click fills search & triggers
+        document.querySelectorAll('.hero-hints kbd').forEach(k=>{
+            k.style.cursor='pointer';
+            k.addEventListener('click',function(){
+                if(inp){inp.value=this.textContent;doSearch();}
+            });
+        });
+    })();
+</script>
+
+<script>
+    // ── Star counter en vivo desde GitHub API ──
+    (function() {
+        const repos = [
+            { id: 'star-btn-core', url: 'https://api.github.com/repos/PADIM-MX/padim' },
+            { id: 'star-btn-scrapers', url: 'https://api.github.com/repos/Trogloautoegocrata/mx-property-scrapers' }
+        ];
+
+        repos.forEach(function(repo) {
+            fetch(repo.url)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var btn = document.getElementById(repo.id);
+                    if (btn && data.stargazers_count !== undefined) {
+                        btn.textContent = '★ ' + data.stargazers_count + ' estrellas';
+                    }
+                })
+                .catch(function() { /* silencioso */ });
+        });
+    })();
+</script>
+
+<!-- Mobile nav panel -->
+<div class="nav-overlay" id="nav-overlay"></div>
+<div class="nav-panel" id="nav-panel">
+    <div class="nav-brand"><span>PADIM</span></div>
+    <a href="#api">API</a>
+    <a href="#datos">Datos</a>
+    <a href="#trust">Trust</a>
+    <a href="#cli">CLI</a>
+    <a href="colaborar.html">Colaborar</a>
+    <a href="https://github.com/PADIM-MX/padim" target="_blank">GitHub</a>
+    <div class="nav-github">
+        ★ <a href="https://github.com/PADIM-MX/padim" target="_blank">Star en GitHub</a>
+    </div>
+</div>
+
+<script>
+    // ── Hamburger menu toggle ──
+    (function() {
+        const hamburger = document.getElementById('hamburger');
+        const panel = document.getElementById('nav-panel');
+        const overlay = document.getElementById('nav-overlay');
+        const body = document.body;
+
+        function openMenu() {
+            hamburger.classList.add('active');
+            panel.classList.add('open');
+            overlay.classList.add('open');
+            body.classList.add('nav-open');
+            hamburger.setAttribute('aria-label', 'Cerrar menú');
+        }
+
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            panel.classList.remove('open');
+            overlay.classList.remove('open');
+            body.classList.remove('nav-open');
+            hamburger.setAttribute('aria-label', 'Abrir menú');
+        }
+
+        if (!hamburger || !panel || !overlay) {
+            console.warn('PADIM: hamburger elements not found');
+        } else {
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (panel.classList.contains('open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            overlay.addEventListener('click', closeMenu);
+
+            // Close on Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && panel.classList.contains('open')) {
+                    closeMenu();
+                }
+            });
+
+            // Close on nav link click (smooth scroll + close)
+            panel.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    closeMenu();
+                    // Let native anchor scroll work
+                });
+            });
+        }
+    })();
 </script>
 
 </body>
